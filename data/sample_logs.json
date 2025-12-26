@@ -1,0 +1,112 @@
+[
+  {
+    "event_time": "2024-12-26 08:00:15",
+    "user_name": "john_doe",
+    "event_type": "LOGIN",
+    "object": "/admin/dashboard",
+    "client_ip": "192.168.1.100",
+    "outcome": "SUCCESS",
+    "service": "HTTPS",
+    "alert_level": "INFO"
+  },
+  {
+    "event_time": "2024-12-26 08:05:22",
+    "user_name": "john_doe",
+    "event_type": "FILE_ACCESS",
+    "object": "/data/reports.xlsx",
+    "client_ip": "192.168.1.100",
+    "outcome": "SUCCESS",
+    "service": "SMB",
+    "alert_level": "INFO"
+  },
+  {
+    "event_time": "2024-12-26 08:20:12",
+    "user_name": "unknown_user",
+    "event_type": "LOGIN",
+    "object": "/admin/panel",
+    "client_ip": "203.0.113.45",
+    "outcome": "FAILED",
+    "service": "HTTPS",
+    "alert_level": "WARNING"
+  },
+  {
+    "event_time": "2024-12-26 08:20:45",
+    "user_name": "unknown_user",
+    "event_type": "LOGIN",
+    "object": "/admin/panel",
+    "client_ip": "203.0.113.45",
+    "outcome": "FAILED",
+    "service": "HTTPS",
+    "alert_level": "WARNING"
+  },
+  {
+    "event_time": "2024-12-26 08:22:30",
+    "user_name": "admin",
+    "event_type": "LOGIN",
+    "object": "/admin/panel",
+    "client_ip": "203.0.113.45",
+    "outcome": "SUCCESS",
+    "service": "HTTPS",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 08:23:00",
+    "user_name": "admin",
+    "event_type": "PRIVILEGE_ESCALATION",
+    "object": "/system/root",
+    "client_ip": "203.0.113.45",
+    "outcome": "SUCCESS",
+    "service": "SSH",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 08:24:15",
+    "user_name": "admin",
+    "event_type": "FILE_ACCESS",
+    "object": "/data/sensitive/customer_db.sql",
+    "client_ip": "203.0.113.45",
+    "outcome": "SUCCESS",
+    "service": "FTP",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 08:25:30",
+    "user_name": "admin",
+    "event_type": "FILE_DOWNLOAD",
+    "object": "/data/sensitive/customer_db.sql",
+    "client_ip": "203.0.113.45",
+    "outcome": "SUCCESS",
+    "service": "FTP",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 08:26:45",
+    "user_name": "admin",
+    "event_type": "FILE_DELETE",
+    "object": "/logs/access.log",
+    "client_ip": "203.0.113.45",
+    "outcome": "SUCCESS",
+    "service": "SSH",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 09:35:45",
+    "user_name": "malware_scan",
+    "event_type": "THREAT_DETECTED",
+    "object": "/home/john/downloads/file.exe",
+    "client_ip": "192.168.1.100",
+    "outcome": "BLOCKED",
+    "service": "AV",
+    "alert_level": "CRITICAL"
+  },
+  {
+    "event_time": "2024-12-26 09:45:12",
+    "user_name": "unknown",
+    "event_type": "SQL_INJECTION_ATTEMPT",
+    "object": "/search?q=",
+    "client_ip": "203.0.113.75",
+    "outcome": "BLOCKED",
+    "service": "HTTPS",
+    "alert_level": "CRITICAL"
+  }
+]

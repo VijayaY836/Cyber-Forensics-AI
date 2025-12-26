@@ -1,0 +1,122 @@
+/* Dark Theme for Cyber Forensics Dashboard */
+
+/* Main background */
+.stApp {
+    background-color: #0e1117;
+    color: #fafafa;
+}
+
+/* Sidebar styling */
+section[data-testid="stSidebar"] {
+    background-color: #1a1d29;
+    border-right: 2px solid #00ff41;
+}
+
+/* Headers */
+h1, h2, h3 {
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+/* Metric cards */
+div[data-testid="stMetricValue"] {
+    color: #00ff41;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+div[data-testid="stMetricLabel"] {
+    color: #fafafa;
+    font-size: 1.1rem;
+}
+
+/* File uploader */
+section[data-testid="stFileUploader"] {
+    background-color: #1a1d29;
+    border: 2px dashed #00ff41;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #00ff41;
+    color: #0e1117;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: all 0.3s;
+}
+
+.stButton > button:hover {
+    background-color: #00cc33;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+}
+
+/* Dataframe tables */
+.dataframe {
+    background-color: #1a1d29;
+    color: #fafafa;
+    border: 1px solid #00ff41;
+}
+
+/* Success/Warning/Error messages */
+.stSuccess {
+    background-color: rgba(0, 255, 65, 0.1);
+    border-left: 4px solid #00ff41;
+}
+
+.stWarning {
+    background-color: rgba(255, 165, 0, 0.1);
+    border-left: 4px solid #ffa500;
+}
+
+.stError {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-left: 4px solid #ff0000;
+}
+
+/* Expander sections */
+.streamlit-expanderHeader {
+    background-color: #1a1d29;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    border-radius: 5px;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #1a1d29;
+    border-bottom: 2px solid #00ff41;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #fafafa;
+    background-color: transparent;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #00ff41;
+    border-bottom: 3px solid #00ff41;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0e1117;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ff41;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cc33;
+}

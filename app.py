@@ -840,22 +840,28 @@ elif page == "⏱️ Timeline Analysis":
         
         st.success("✅ Timeline analysis ready")
         
-        # Single button for timeline reconstruction
-        reconstruct_clicked = st.button("⏱️ Reconstruct Timeline", type="primary", key="timeline_btn")
-        if reconstruct_clicked or 'timeline_results' in st.session_state:
-            if reconstruct_clicked or 'timeline_results' not in st.session_state:
+        # Build timeline button
+        if st.button("⏱️ Reconstruct Timeline", type="primary", key="timeline_reconstruct_main") or 'timeline_results' in st.session_state:
+            
+            if st.button("⏱️ Reconstruct Timeline", type="primary", key="timeline_reconstruct_inner") or 'timeline_results' not in st.session_state:
                 with st.spinner("⏱️ Building chronological timeline..."):
                     try:
+                        # Build timeline
                         timeline_results = build_timeline(
                             st.session_state.logs_data,
                             st.session_state.anomalies,
                             st.session_state.attack_chains if 'attack_chains' in st.session_state else None
                         )
+                        
+                        # Store in session state
                         st.session_state.timeline_results = timeline_results
+                        
                         st.success("✅ Timeline reconstruction complete!")
+                        
                     except Exception as e:
                         st.error(f"❌ Error during timeline reconstruction: {str(e)}")
                         st.exception(e)
+            
             # Display results
             if 'timeline_results' in st.session_state:
                 results = st.session_state.timeline_results
@@ -1097,10 +1103,43 @@ elif page == "📊 Forensic Report":
                 with tab2:
                     st.markdown("### 📥 Download Report")
                     
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3, col4 = st.columns(4)
                     
                     with col1:
-                        st.markdown("#### Markdown Format")
+                        st.markdown("#### 📄 PDF Format")
+                        
+                        # Generate PDF button
+                        if st.button("🔄 Generate PDF", key="gen_pdf", use_container_width=True):
+                            with st.spinner("📄 Creating PDF..."):
+                                try:
+                                    from utils.pdf_generator import generate_pdf_report
+                                    
+                                    # Generate PDF
+                                    pdf_bytes = generate_pdf_report(report)
+                                    
+                                    # Store in session state
+                                    st.session_state.pdf_report = pdf_bytes
+                                    
+                                    st.success("✅ PDF generated!")
+                                    
+                                except Exception as e:
+                                    st.error(f"❌ PDF generation error: {str(e)}")
+                        
+                        # Download PDF button (only show if PDF generated)
+                        if 'pdf_report' in st.session_state:
+                            st.download_button(
+                                label="📥 Download PDF",
+                                data=st.session_state.pdf_report,
+                                file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                                mime="application/pdf",
+                                use_container_width=True
+                            )
+                            st.caption("✅ Professional PDF with formatting")
+                        else:
+                            st.caption("⚠️ Click 'Generate PDF' first")
+                    
+                    with col2:
+                        st.markdown("#### 📝 Markdown Format")
                         st.download_button(
                             label="📥 Download as .md",
                             data=report,
@@ -1108,10 +1147,10 @@ elif page == "📊 Forensic Report":
                             mime="text/markdown",
                             use_container_width=True
                         )
-                        st.caption("✅ Best for viewing in Markdown editors")
+                        st.caption("✅ Best for version control")
                     
-                    with col2:
-                        st.markdown("#### Text Format")
+                    with col3:
+                        st.markdown("#### 📋 Text Format")
                         st.download_button(
                             label="📥 Download as .txt",
                             data=report,
@@ -1119,10 +1158,10 @@ elif page == "📊 Forensic Report":
                             mime="text/plain",
                             use_container_width=True
                         )
-                        st.caption("✅ Universal text format")
+                        st.caption("✅ Universal compatibility")
                     
-                    with col3:
-                        st.markdown("#### HTML Format")
+                    with col4:
+                        st.markdown("#### 🌐 HTML Format")
                         # Convert Markdown to simple HTML
                         html_report = f"""
 <!DOCTYPE html>
@@ -1131,10 +1170,28 @@ elif page == "📊 Forensic Report":
     <meta charset="UTF-8">
     <title>Forensic Report</title>
     <style>
-        body {{ font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }}
+        body {{ 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: #0e1117;
+            color: #fafafa;
+        }}
         h1, h2, h3 {{ color: #00ff41; }}
-        code {{ background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }}
-        pre {{ background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }}
+        code {{ 
+            background: #1a1d29; 
+            padding: 2px 5px; 
+            border-radius: 3px;
+            color: #00ff41;
+        }}
+        pre {{ 
+            background: #1a1d29; 
+            padding: 10px; 
+            border-radius: 5px; 
+            overflow-x: auto;
+            border-left: 3px solid #00ff41;
+        }}
     </style>
 </head>
 <body>
@@ -1149,10 +1206,29 @@ elif page == "📊 Forensic Report":
                             mime="text/html",
                             use_container_width=True
                         )
-                        st.caption("✅ Can be opened in any browser")
+                        st.caption("✅ Open in any browser")
                     
                     st.markdown("---")
-                    st.info("💡 **Tip:** Save the Markdown file and use tools like Pandoc or online converters to generate PDF reports")
+                    
+                    # Format comparison
+                    st.markdown("### 📊 Format Comparison")
+                    
+                    format_comparison = pd.DataFrame({
+                        'Format': ['PDF', 'Markdown', 'Text', 'HTML'],
+                        'Professional': ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐'],
+                        'Formatting': ['Full', 'Basic', 'None', 'Full'],
+                        'File Size': ['Large', 'Small', 'Small', 'Medium'],
+                        'Best For': [
+                            'Management, Legal, Stakeholders',
+                            'Developers, Documentation',
+                            'Quick sharing, Email',
+                            'Web viewing, Archiving'
+                        ]
+                    })
+                    
+                    st.dataframe(format_comparison, use_container_width=True, hide_index=True)
+                    
+                    st.info("💡 **Recommendation:** Use PDF for official reports, Markdown for technical teams")
                 
                 st.markdown("---")
                 

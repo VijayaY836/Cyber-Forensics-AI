@@ -1,0 +1,122 @@
+/* Custom Professional Theme for Cyber Forensics AI Dashboard */
+
+body, .stApp {
+    background: linear-gradient(135deg, #0e1117 0%, #232946 100%) !important;
+    color: #fafafa !important;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #00ff41 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+
+.stButton > button, .stDownloadButton > button {
+    background: linear-gradient(90deg, #00ff41 0%, #232946 100%) !important;
+    color: #232946 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1.05em !important;
+    box-shadow: 0 2px 8px rgba(0,255,65,0.08);
+    transition: background 0.3s, color 0.3s, transform 0.1s;
+}
+.stButton > button:hover, .stDownloadButton > button:hover {
+    background: linear-gradient(90deg, #232946 0%, #00ff41 100%) !important;
+    color: #00ff41 !important;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: #181c2a !important;
+    color: #fafafa !important;
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 600 !important;
+    font-size: 1.08em !important;
+    margin-right: 2px;
+    transition: background 0.2s, color 0.2s;
+}
+.stTabs [aria-selected="true"] {
+    background: #00ff41 !important;
+    color: #232946 !important;
+}
+
+.stMetric {
+    background: #181c2a !important;
+    border-radius: 10px !important;
+    padding: 18px 10px !important;
+    box-shadow: 0 2px 8px rgba(0,255,65,0.07);
+    margin-bottom: 10px !important;
+}
+
+.stDataFrame, .stTable {
+    background: #181c2a !important;
+    border-radius: 10px !important;
+    color: #fafafa !important;
+    font-size: 1.01em !important;
+}
+
+.stAlert, .stInfo, .stWarning, .stError, .stSuccess {
+    border-radius: 8px !important;
+    font-size: 1.05em !important;
+}
+
+.stSpinner {
+    color: #00ff41 !important;
+}
+
+.stMarkdown code, pre {
+    background: #232946 !important;
+    color: #00ff41 !important;
+    border-radius: 5px;
+    padding: 2px 6px;
+}
+
+.stExpanderHeader {
+    font-weight: 600 !important;
+    color: #00ff41 !important;
+}
+
+.stCaption {
+    color: #7fdbff !important;
+    font-size: 0.98em !important;
+}
+
+.stContainer {
+    padding: 18px 24px !important;
+    border-radius: 12px !important;
+    background: rgba(24,28,42,0.95) !important;
+    box-shadow: 0 2px 12px rgba(0,255,65,0.04);
+    margin-bottom: 18px !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #232946;
+}
+::-webkit-scrollbar-thumb {
+    background: #00ff41;
+    border-radius: 8px;
+}
+
+/* Animations */
+.stButton > button, .stDownloadButton > button {
+    animation: fadeInUp 0.5s;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stTabs [data-baseweb="tab"] {
+    animation: fadeInTab 0.6s;
+}
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hide Streamlit default hamburger and footer */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}

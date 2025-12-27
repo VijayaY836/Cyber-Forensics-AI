@@ -336,3 +336,69 @@ def parse_logs(file_buffer, file_type='csv'):
     validation = parser.validate_logs(df)
     
     return df, stats, validation
+
+
+def parse_multiple_logs(file_buffers_list):
+    """
+    Parse multiple log files and combine them
+    
+    Args:
+        file_buffers_list: List of tuples [(file_buffer, filename, file_type), ...]
+        
+    Returns:
+        tuple: (combined_df, combined_stats, file_summaries)
+    """
+    parser = LogParser()
+    all_dataframes = []
+    file_summaries = []
+    
+    for file_buffer, filename, file_type in file_buffers_list:
+        try:
+            # Parse individual file
+            if file_type == 'csv':
+                df = parser.parse_csv(file_buffer)
+            elif file_type == 'json':
+                df = parser.parse_json(file_buffer)
+            else:
+                continue
+            
+            # Add source file column
+            df['source_file'] = filename
+            
+            # Get file-specific stats
+            file_stats = parser.get_statistics(df)
+            file_validation = parser.validate_logs(df)
+            
+            file_summaries.append({
+                'filename': filename,
+                'file_type': file_type,
+                'event_count': len(df),
+                'stats': file_stats,
+                'validation': file_validation
+            })
+            
+            all_dataframes.append(df)
+            
+        except Exception as e:
+            file_summaries.append({
+                'filename': filename,
+                'file_type': file_type,
+                'event_count': 0,
+                'error': str(e)
+            })
+    
+    # Combine all dataframes
+    if all_dataframes:
+        combined_df = pd.concat(all_dataframes, ignore_index=True)
+        
+        # Sort by timestamp
+        combined_df = combined_df.sort_values('timestamp').reset_index(drop=True)
+        
+        # Generate combined statistics
+        combined_stats = parser.get_statistics(combined_df)
+        combined_stats['file_count'] = len(all_dataframes)
+        combined_stats['files'] = [f['filename'] for f in file_summaries if 'error' not in f]
+        
+        return combined_df, combined_stats, file_summaries
+    else:
+        return None, None, file_summaries

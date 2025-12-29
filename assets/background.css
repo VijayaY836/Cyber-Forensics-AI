@@ -1,0 +1,150 @@
+/* Background Image Styling for Cyber Forensics AI Dashboard */
+
+/* Main app background */
+.stApp {
+    /* background-image removed - will be added via Python */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Add semi-transparent overlay to improve readability */
+.stApp::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(14, 17, 23, 0.85);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Ensure content is above background */
+.main .block-container {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+
+/* Keep sidebar readable with blur effect */
+section[data-testid="stSidebar"] {
+    background: rgba(14, 17, 23, 0.95) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Ensure all content elements are positioned above background */
+.element-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Make dataframes and charts have proper backgrounds */
+.stDataFrame, 
+.js-plotly-plot,
+div[data-testid="stMetricValue"],
+div[data-testid="stMetricLabel"] {
+    background: rgba(26, 29, 41, 0.9) !important;
+    border-radius: 8px;
+}
+
+/* Info boxes, warnings, errors, success messages */
+.stAlert {
+    background: rgba(26, 29, 41, 0.95) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background: rgba(26, 29, 41, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: rgba(35, 41, 70, 0.7);
+}
+
+.stTabs [aria-selected="true"] {
+    background: rgba(0, 255, 65, 0.2) !important;
+}
+
+/* Expanders */
+.streamlit-expanderHeader {
+    background: rgba(26, 29, 41, 0.9) !important;
+    backdrop-filter: blur(5px);
+}
+
+.streamlit-expanderContent {
+    background: rgba(14, 17, 23, 0.95) !important;
+}
+
+/* File uploader */
+section[data-testid="stFileUploader"] {
+    background: rgba(26, 29, 41, 0.9);
+    border-radius: 8px;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+/* Radio buttons and checkboxes */
+div[data-testid="stRadio"],
+div[data-testid="stCheckbox"] {
+    background: rgba(26, 29, 41, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Text inputs and selects */
+.stTextInput > div > div,
+.stSelectbox > div > div,
+.stMultiSelect > div > div {
+    background: rgba(26, 29, 41, 0.9) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Spinners */
+.stSpinner > div {
+    border-color: rgba(0, 255, 65, 0.3) transparent rgba(0, 255, 65, 0.3) transparent !important;
+}
+
+/* Make sure text is readable over background */
+.stMarkdown,
+.stText,
+p,
+h1, h2, h3, h4, h5, h6 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Dataframe styling for better visibility */
+.dataframe {
+    background: rgba(26, 29, 41, 0.95) !important;
+}
+
+.dataframe thead tr th {
+    background: rgba(35, 41, 70, 0.95) !important;
+    color: #00ff41 !important;
+}
+
+.dataframe tbody tr:nth-child(even) {
+    background: rgba(20, 23, 35, 0.5) !important;
+}
+
+.dataframe tbody tr:nth-child(odd) {
+    background: rgba(26, 29, 41, 0.5) !important;
+}
+
+/* Plotly charts background */
+.js-plotly-plot .plotly {
+    background: rgba(26, 29, 41, 0.9) !important;
+}
+
+/* Ensure metrics have good visibility */
+div[data-testid="stMetric"] {
+    background: rgba(26, 29, 41, 0.85);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 65, 0.2);
+}

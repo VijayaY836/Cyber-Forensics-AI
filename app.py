@@ -21,29 +21,54 @@ st.set_page_config(
 
 
 def load_css():
+    # Load existing CSS files FIRST
     for css_file in ["assets/style.css", "assets/custom_theme.css"]:
         try:
             with open(css_file) as f:
                 css = f.read()
-                # Remove button contrast effect, force green
-                css += """
-                .stButton>button, .stDownloadButton>button {
-                    background: #00ff41 !important;
-                    color: #232946 !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                    transition: background 0.2s;
-                }
-                .stButton>button:hover, .stDownloadButton>button:hover {
-                    background: #00e63a !important;
-                    color: #232946 !important;
-                }
-                """
                 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
         except FileNotFoundError:
             pass
-load_css()
+    
+    # Your existing button styling
+    button_css = """
+    <style>
+    .stButton>button, .stDownloadButton>button {
+        background: #00ff41 !important;
+        color: #232946 !important;
+        border: none !important;
+        box-shadow: none !important;
+        transition: background 0.2s;
+    }
+    .stButton>button:hover, .stDownloadButton>button:hover {
+        background: #00e63a !important;
+        color: #232946 !important;
+    }
+    </style>
+    """
+    st.markdown(button_css, unsafe_allow_html=True)
+    
+    # NOW load background image LAST (so it overrides everything)
+    try:
+        import base64
+        with open("bg.png", "rb") as f:
+            banner_data = base64.b64encode(f.read()).decode()
+        st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image: url('data:image/png;base64,{banner_data}') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }}
+        </style>
+        """, unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass  # Background won't show if file missing
 
+# ✅ ADD THIS LINE TO ACTUALLY CALL THE FUNCTION
+load_css()
 # --- Main Title (centered, no header bar) ---
 st.markdown("""
 <div style='text-align:center;margin-top:1.5em;'>
@@ -114,13 +139,14 @@ with col_clear:
     clear = st.button("🧹 Clear", type="secondary")
 
 # --- Clear Button Logic ---
+# --- Clear Button Logic ---
 if 'clear' not in st.session_state:
     st.session_state['clear'] = False
 if clear:
     for key in [
         'logs_data', 'log_stats', 'log_validation', 'anomalies', 'anomaly_results',
         'attack_chains', 'correlation_results', 'timeline_results', 'forensic_report',
-        'pdf_report', 'analysis_complete', 'upload_mode'
+        'pdf_report', 'pdf_bytes', 'analysis_complete', 'upload_mode'  # Added pdf_bytes
     ]:
         if key in st.session_state:
             del st.session_state[key]
@@ -484,42 +510,71 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
             except Exception as e:
                 st.session_state.forensic_report = None
                 st.error(f"❌ Error generating report: {str(e)}")
+        
         report = st.session_state.forensic_report
+        
         st.markdown("### 📥 Download Report")
         col1, col2, col3, col4 = st.columns(4)
+        
         if report is not None:
             with col1:
                 st.markdown("#### 📄 PDF Format")
                 from utils.pdf_generator import generate_pdf_report
-                if st.button("📥 Download as PDF", key="download_pdf", use_container_width=True):
+                
+                # Generate PDF once and cache it in session state
+                if 'pdf_bytes' not in st.session_state:
                     with st.spinner("📄 Generating PDF..."):
                         try:
-                            pdf_bytes = generate_pdf_report(report)
-                            st.download_button(
-                                label="📥 Click here to download PDF",
-                                data=pdf_bytes,
-                                file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                                mime="application/pdf",
-                                use_container_width=True
-                            )
-                            st.caption("✅ Professional PDF with formatting")
+                            st.session_state.pdf_bytes = generate_pdf_report(report)
                         except Exception as e:
                             st.error(f"❌ PDF generation error: {str(e)}")
+                            st.session_state.pdf_bytes = None
+                
+                # Direct download button without page change
+                if st.session_state.get('pdf_bytes'):
+                    st.download_button(
+                        label="📥 Download as PDF",
+                        data=st.session_state.pdf_bytes,
+                        file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                        mime="application/pdf",
+                        use_container_width=True,
+                        key="download_pdf"
+                    )
+                    st.caption("✅ Professional PDF with formatting")
+                else:
+                    st.error("❌ PDF not available")
+                    
             with col2:
                 st.markdown("#### 📝 Markdown Format")
-                st.download_button(label="📥 Download as .md", data=report, file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md", mime="text/markdown", use_container_width=True, type="primary")
+                st.download_button(
+                    label="📥 Download as .md", 
+                    data=report, 
+                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md", 
+                    mime="text/markdown", 
+                    use_container_width=True, 
+                    type="primary"
+                )
                 st.caption("✅ Best for version control")
+                
             with col3:
                 st.markdown("#### 📋 Text Format")
-                st.download_button(label="📥 Download as .txt", data=report, file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", mime="text/plain", use_container_width=True, type="primary")
+                st.download_button(
+                    label="📥 Download as .txt", 
+                    data=report, 
+                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", 
+                    mime="text/plain", 
+                    use_container_width=True, 
+                    type="primary"
+                )
                 st.caption("✅ Universal compatibility")
+                
             with col4:
                 st.markdown("#### 🌐 HTML Format")
                 html_report = f"""
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset=\"UTF-8\">
+    <meta charset="UTF-8">
     <title>Forensic Report</title>
     <style>
         body {{ font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #0e1117; color: #fafafa; }}
@@ -533,16 +588,25 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
 </body>
 </html>
 """
-                st.download_button(label="📥 Download as .html", data=html_report, file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html", mime="text/html", use_container_width=True, type="primary")
+                st.download_button(
+                    label="📥 Download as .html", 
+                    data=html_report, 
+                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html", 
+                    mime="text/html", 
+                    use_container_width=True, 
+                    type="primary"
+                )
                 st.caption("✅ Open in any browser")
         else:
             st.warning("❌ Report content is missing. Please re-run the analysis or check for errors above.")
+            
         st.markdown("### 📄 Full Forensic Report")
         with st.container():
             if report:
                 st.markdown(report)
             else:
                 st.warning("❌ Report content is missing. Please re-run the analysis or check for errors above.")
+                
         st.markdown("### 📊 Format Comparison")
         format_comparison = pd.DataFrame({
             'Format': ['PDF', 'Markdown', 'Text', 'HTML'],
@@ -558,6 +622,7 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
         })
         st.dataframe(format_comparison, use_container_width=True, hide_index=True)
         st.info("💡 **Recommendation:** Use PDF for official reports, Markdown for technical teams")
+        
         st.markdown("### 📊 Report Statistics")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -572,28 +637,36 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
         with col4:
             reading_time = max(1, word_count // 200)
             st.metric("Reading Time", f"{reading_time} min")
-            st.markdown("### 🎯 Report Highlights")
-            if st.session_state.anomalies is not None:
-                anomalies = st.session_state.anomalies
-                critical_count = (anomalies['severity_level'] == 'CRITICAL').sum()
-                high_count = (anomalies['severity_level'] == 'HIGH').sum()
-                col1, col2 = st.columns(2)
-                with col1:
-                    if critical_count > 0:
-                        st.error(f"🚨 **{critical_count}** CRITICAL severity events detected")
-                    elif high_count > 0:
-                        st.warning(f"⚠️ **{high_count}** HIGH severity events detected")
+            
+        st.markdown("### 🎯 Report Highlights")
+        if st.session_state.anomalies is not None:
+            anomalies = st.session_state.anomalies
+            critical_count = (anomalies['severity_level'] == 'CRITICAL').sum()
+            high_count = (anomalies['severity_level'] == 'HIGH').sum()
+            col1, col2 = st.columns(2)
+            with col1:
+                if critical_count > 0:
+                    st.error(f"🚨 **{critical_count}** CRITICAL severity events detected")
+                elif high_count > 0:
+                    st.warning(f"⚠️ **{high_count}** HIGH severity events detected")
+                else:
+                    st.success("✅ No critical security incidents detected")
+            with col2:
+                if st.session_state.get('correlation_results'):
+                    chains = st.session_state.correlation_results['attack_chains_detected']
+                    if chains > 0:
+                        st.warning(f"🔗 **{chains}** attack chain(s) identified")
                     else:
-                        st.success("✅ No critical security incidents detected")
-                with col2:
-                    if st.session_state.get('correlation_results'):
-                        chains = st.session_state.correlation_results['attack_chains_detected']
-                        if chains > 0:
-                            st.warning(f"🔗 **{chains}** attack chain(s) identified")
-                        else:
-                            st.info("ℹ️ No multi-stage attacks detected")
-
-
+                        st.info("ℹ️ No multi-stage attacks detected")
+if clear:
+    for key in [
+        'logs_data', 'log_stats', 'log_validation', 'anomalies', 'anomaly_results',
+        'attack_chains', 'correlation_results', 'timeline_results', 'forensic_report',
+        'pdf_report', 'pdf_bytes', 'analysis_complete', 'upload_mode'  # Added pdf_bytes here
+    ]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 # ============================================================================
 # FOOTER
 # ============================================================================

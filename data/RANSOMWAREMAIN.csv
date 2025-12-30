@@ -1,0 +1,49 @@
+timestamp,event_id,user,action,ip_address,resource,result,bytes_transferred,user_agent,session_id
+2024-12-15 03:15:00,EVT-00201,system,process_start,192.168.1.105,\\WORKSTATION\C$\temp\update.exe,SUCCESS,2048,N/A,sess_201
+2024-12-15 03:15:05,EVT-00202,system,registry_modify,192.168.1.105,HKLM\Software\Microsoft\Windows\CurrentVersion\Run,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:10,EVT-00203,system,command_execute,192.168.1.105,vssadmin delete shadows /all /quiet,SUCCESS,256,N/A,sess_201
+2024-12-15 03:15:15,EVT-00204,system,command_execute,192.168.1.105,wbadmin delete catalog -quiet,SUCCESS,256,N/A,sess_201
+2024-12-15 03:15:20,EVT-00205,system,command_execute,192.168.1.105,bcdedit /set {default} recoveryenabled no,SUCCESS,256,N/A,sess_201
+2024-12-15 03:15:25,EVT-00206,system,command_execute,192.168.1.105,bcdedit /set {default} bootstatuspolicy ignoreallfailures,SUCCESS,256,N/A,sess_201
+2024-12-15 03:15:30,EVT-00207,system,service_stop,192.168.1.105,Windows Defender,SUCCESS,128,N/A,sess_201
+2024-12-15 03:15:35,EVT-00208,system,process_terminate,192.168.1.105,MsMpEng.exe,SUCCESS,128,N/A,sess_201
+2024-12-15 03:15:40,EVT-00209,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Documents\report.docx,SUCCESS,45056,N/A,sess_201
+2024-12-15 03:15:41,EVT-00210,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Documents\budget.xlsx,SUCCESS,89600,N/A,sess_201
+2024-12-15 03:15:42,EVT-00211,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Documents\presentation.pptx,SUCCESS,1048576,N/A,sess_201
+2024-12-15 03:15:43,EVT-00212,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Pictures\photo1.jpg,SUCCESS,2097152,N/A,sess_201
+2024-12-15 03:15:44,EVT-00213,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Pictures\photo2.jpg,SUCCESS,1835008,N/A,sess_201
+2024-12-15 03:15:45,EVT-00214,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Documents\report.docx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:46,EVT-00215,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Documents\budget.xlsx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:47,EVT-00216,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Documents\presentation.pptx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:48,EVT-00217,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Pictures\photo1.jpg.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:49,EVT-00218,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Pictures\photo2.jpg.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:50,EVT-00219,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Desktop\contract.pdf,SUCCESS,524288,N/A,sess_201
+2024-12-15 03:15:51,EVT-00220,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Desktop\invoice.pdf,SUCCESS,358400,N/A,sess_201
+2024-12-15 03:15:52,EVT-00221,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Downloads\database.sql,SUCCESS,5242880,N/A,sess_201
+2024-12-15 03:15:53,EVT-00222,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Desktop\contract.pdf.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:54,EVT-00223,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Desktop\invoice.pdf.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:55,EVT-00224,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Downloads\database.sql.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:15:56,EVT-00225,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Videos\vacation.mp4,SUCCESS,10485760,N/A,sess_201
+2024-12-15 03:15:58,EVT-00226,WORKSTATION$,file_modify,192.168.1.105,C:\Users\John\Music\playlist.mp3,SUCCESS,4194304,N/A,sess_201
+2024-12-15 03:15:59,EVT-00227,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Videos\vacation.mp4.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:00,EVT-00228,WORKSTATION$,file_rename,192.168.1.105,C:\Users\John\Music\playlist.mp3.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:02,EVT-00229,WORKSTATION$,network_access,192.168.1.105,\\FILESERVER\SharedDocs,SUCCESS,1024,N/A,sess_201
+2024-12-15 03:16:05,EVT-00230,WORKSTATION$,file_modify,192.168.1.105,\\FILESERVER\SharedDocs\Q4_Report.docx,SUCCESS,65536,N/A,sess_201
+2024-12-15 03:16:06,EVT-00231,WORKSTATION$,file_modify,192.168.1.105,\\FILESERVER\SharedDocs\Budget_2024.xlsx,SUCCESS,131072,N/A,sess_201
+2024-12-15 03:16:07,EVT-00232,WORKSTATION$,file_modify,192.168.1.105,\\FILESERVER\SharedDocs\Project_Plan.pptx,SUCCESS,2097152,N/A,sess_201
+2024-12-15 03:16:08,EVT-00233,WORKSTATION$,file_rename,192.168.1.105,\\FILESERVER\SharedDocs\Q4_Report.docx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:09,EVT-00234,WORKSTATION$,file_rename,192.168.1.105,\\FILESERVER\SharedDocs\Budget_2024.xlsx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:10,EVT-00235,WORKSTATION$,file_rename,192.168.1.105,\\FILESERVER\SharedDocs\Project_Plan.pptx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:12,EVT-00236,WORKSTATION$,file_modify,192.168.1.105,\\FILESERVER\Finance\Payroll.xlsx,SUCCESS,262144,N/A,sess_201
+2024-12-15 03:16:13,EVT-00237,WORKSTATION$,file_modify,192.168.1.105,\\FILESERVER\Finance\Expenses.xlsx,SUCCESS,196608,N/A,sess_201
+2024-12-15 03:16:14,EVT-00238,WORKSTATION$,file_rename,192.168.1.105,\\FILESERVER\Finance\Payroll.xlsx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:15,EVT-00239,WORKSTATION$,file_rename,192.168.1.105,\\FILESERVER\Finance\Expenses.xlsx.encrypted,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:18,EVT-00240,WORKSTATION$,network_access,192.168.1.105,\\BACKUP-SERVER\Backups,SUCCESS,1024,N/A,sess_201
+2024-12-15 03:16:20,EVT-00241,WORKSTATION$,file_delete,192.168.1.105,\\BACKUP-SERVER\Backups\full_backup_20241214.bak,SUCCESS,128,N/A,sess_201
+2024-12-15 03:16:22,EVT-00242,WORKSTATION$,file_delete,192.168.1.105,\\BACKUP-SERVER\Backups\incremental_20241215.bak,SUCCESS,128,N/A,sess_201
+2024-12-15 03:16:25,EVT-00243,WORKSTATION$,file_create,192.168.1.105,C:\Users\John\Desktop\README.txt,SUCCESS,2048,N/A,sess_201
+2024-12-15 03:16:26,EVT-00244,WORKSTATION$,file_create,192.168.1.105,C:\Users\John\Documents\README.txt,SUCCESS,2048,N/A,sess_201
+2024-12-15 03:16:27,EVT-00245,WORKSTATION$,file_create,192.168.1.105,\\FILESERVER\SharedDocs\HOW_TO_DECRYPT.html,SUCCESS,4096,N/A,sess_201
+2024-12-15 03:16:28,EVT-00246,WORKSTATION$,file_create,192.168.1.105,\\FILESERVER\Finance\HOW_TO_DECRYPT.html,SUCCESS,4096,N/A,sess_201
+2024-12-15 03:16:30,EVT-00247,system,network_connection,192.168.1.105,tor-exit-node-82.221.101.3:9050,SUCCESS,512,N/A,sess_201
+2024-12-15 03:16:35,EVT-00248,system,data_exfiltration,192.168.1.105,https://attacker-c2-server.onion,SUCCESS,1048576,N/A,sess_201

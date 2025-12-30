@@ -1,0 +1,5 @@
+timestamp,host,filename,operation,extension_changed
+2025-03-02T02:11:01,WS-014,report.docx,modify,true
+2025-03-02T02:11:02,WS-014,image.jpg,modify,true
+2025-03-02T02:11:03,WS-014,notes.pdf,modify,true
+2025-03-02T02:11:04,WS-014,finance.xlsx,modify,true

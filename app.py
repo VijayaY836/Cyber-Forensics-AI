@@ -9,6 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import json
+from modules.playbooks.playbook_manager import PlaybookManager
 
 
 # Page configuration
@@ -98,7 +99,8 @@ for key, default in [
     ('forensic_report', None),
     ('pdf_report', None),
     ('analysis_complete', False),
-    ('upload_mode', None)
+    ('upload_mode', None),
+    ('prediction_results', None)
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -134,7 +136,7 @@ else:
 # --- Begin Process & Clear Button ---
 col_begin, col_clear = st.columns([3,1])
 with col_begin:
-    begin = st.button("🚦 Begin Process", type="primary")
+    begin = st.button(" Begin Analysis", type="primary")
 with col_clear:
     clear = st.button("🧹 Clear", type="secondary")
 
@@ -146,7 +148,7 @@ if clear:
     for key in [
         'logs_data', 'log_stats', 'log_validation', 'anomalies', 'anomaly_results',
         'attack_chains', 'correlation_results', 'timeline_results', 'forensic_report',
-        'pdf_report', 'pdf_bytes', 'analysis_complete', 'upload_mode'  # Added pdf_bytes
+        'pdf_report', 'pdf_bytes', 'analysis_complete', 'upload_mode', 'prediction_results'
     ]:
         if key in st.session_state:
             del st.session_state[key]
@@ -224,8 +226,8 @@ if uploaded_files and begin:
 
 # --- Results Tabs ---
 if st.session_state.logs_data is not None and st.session_state.anomalies is not None and st.session_state.attack_chains is not None and st.session_state.timeline_results is not None:
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📋 Parsed Logs", "🔎 Anomaly Detection", "🔗 Event Correlation", "⏱️ Timeline Analysis", "📊 Forensic Report"
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    "📋 Parsed Logs", "🔎 Anomaly Detection", "🔗 Event Correlation", "⏱️ Timeline Analysis", "🔮 Attack Prediction", "📊 Forensic Report"
     ])
 
     with tab1:
@@ -468,6 +470,443 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
         st.download_button(label="📥 Download Timeline as CSV", data=csv, file_name="attack_timeline.csv", mime="text/csv")
 
     with tab5:
+        # --- Attack Prediction Tab ---
+        st.markdown("### 🔮 AI-Powered Attack Prediction")
+        st.info("📚 Using comprehensive playbook knowledge base to predict attack progression and recommend countermeasures")
+        
+        from modules.playbooks.playbook_manager import PlaybookManager
+        
+        # Initialize playbook manager
+        if 'playbook_manager' not in st.session_state:
+            with st.spinner("🔄 Loading playbook library..."):
+                st.session_state.playbook_manager = PlaybookManager()
+        
+        manager = st.session_state.playbook_manager
+        
+        # Identify attacks from current data
+        st.markdown("### 🎯 Attack Identification")
+        
+        # Build log patterns from actual data
+        anomaly_df = st.session_state.anomalies
+        chains = st.session_state.attack_chains
+        
+        # Build comprehensive log patterns from actual data with safe column checks
+        log_patterns = {}
+        
+        # Failed logins
+        if 'action' in anomaly_df.columns and 'result' in anomaly_df.columns:
+            log_patterns['failed_logins'] = len(anomaly_df[
+                anomaly_df['action'].str.contains('login', case=False, na=False) & 
+                (anomaly_df['result'] == 'FAILED')
+            ])
+        else:
+            log_patterns['failed_logins'] = 0
+        
+        # SQL injection keywords
+        sql_count = 0
+        if 'resource' in anomaly_df.columns:
+            sql_count += len(anomaly_df[
+                anomaly_df['resource'].str.contains('SELECT|UNION|DROP|INSERT|UPDATE|DELETE|information_schema', case=False, na=False)
+            ])
+        if 'action' in anomaly_df.columns:
+            sql_count += len(anomaly_df[
+                anomaly_df['action'].str.contains('SELECT|UNION|DROP|INSERT', case=False, na=False)
+            ])
+        log_patterns['sql_keywords'] = sql_count
+        
+        # SQL errors
+        if 'result' in anomaly_df.columns:
+            log_patterns['sql_errors'] = len(anomaly_df[anomaly_df['result'] == 'ERROR'])
+        else:
+            log_patterns['sql_errors'] = 0
+        
+        # Mass file modifications
+        if 'action' in anomaly_df.columns:
+            log_patterns['mass_file_modifications'] = len(anomaly_df[
+                anomaly_df['action'].str.contains('file_modify|file_write|modify|write|delete', case=False, na=False)
+            ])
+        else:
+            log_patterns['mass_file_modifications'] = 0
+        
+        # Encrypted file extensions
+        if 'resource' in anomaly_df.columns:
+            log_patterns['encrypted_extensions'] = len(anomaly_df[
+                anomaly_df['resource'].str.contains('.encrypted|.locked|.crypto|.crypt', case=False, na=False)
+            ])
+        else:
+            log_patterns['encrypted_extensions'] = 0
+        
+        # Ransom note files
+        if 'resource' in anomaly_df.columns:
+            log_patterns['ransom_note_files'] = len(anomaly_df[
+                anomaly_df['resource'].str.contains('README|HOW_TO_DECRYPT|DECRYPT_FILES|RECOVER_FILES|ransom', case=False, na=False)
+            ])
+        else:
+            log_patterns['ransom_note_files'] = 0
+        
+        # Shadow copy deletion
+        if 'resource' in anomaly_df.columns:
+            log_patterns['shadow_copy_deletion'] = len(anomaly_df[
+                anomaly_df['resource'].str.contains('vssadmin|shadow|bcdedit|wbadmin', case=False, na=False)
+            ])
+        else:
+            log_patterns['shadow_copy_deletion'] = 0
+        
+        # File renames
+        if 'action' in anomaly_df.columns:
+            log_patterns['file_renames'] = len(anomaly_df[
+                anomaly_df['action'].str.contains('file_rename|rename', case=False, na=False)
+            ])
+        else:
+            log_patterns['file_renames'] = 0
+        
+        # Backup deletion
+        if 'action' in anomaly_df.columns and 'resource' in anomaly_df.columns:
+            log_patterns['backup_deletion'] = len(anomaly_df[
+                (anomaly_df['action'].str.contains('file_delete|delete', case=False, na=False)) &
+                (anomaly_df['resource'].str.contains('backup|.bak|.bkp', case=False, na=False))
+            ])
+        else:
+            log_patterns['backup_deletion'] = 0
+        
+        # Unusual IP count
+        if 'ip_address' in anomaly_df.columns:
+            log_patterns['unusual_ip'] = len(anomaly_df['ip_address'].unique()) > 10
+        else:
+            log_patterns['unusual_ip'] = False
+        
+        # High data transfer (SAFE CHECK)
+        if 'bytes_transferred' in anomaly_df.columns:
+            log_patterns['high_data_transfer'] = len(anomaly_df[anomaly_df['bytes_transferred'] > 500000])
+        else:
+            log_patterns['high_data_transfer'] = 0
+        detected_attacks = manager.identify_attack(log_patterns)
+        
+        if detected_attacks:
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Attacks Identified", len(detected_attacks))
+            with col2:
+                st.metric("Highest Confidence", f"{detected_attacks[0]['confidence']:.0%}")
+            with col3:
+                st.metric("Severity", detected_attacks[0]['severity'])
+            
+            # Show detected attacks
+            st.markdown("#### 🚨 Detected Attack Types:")
+            for attack in detected_attacks:
+                with st.expander(f"{'🔴' if attack['severity'] == 'CRITICAL' else '🟠'} {attack['attack_name']} (Confidence: {attack['confidence']:.0%})", expanded=(attack == detected_attacks[0])):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write(f"**Attack ID:** {attack['attack_id']}")
+                        st.write(f"**Confidence:** {attack['confidence']:.0%}")
+                        st.write(f"**Severity:** {attack['severity']}")
+                    with col2:
+                        st.write(f"**Detection Reason:**")
+                        st.write(attack['reason'])
+            
+            # Detailed prediction for top attack
+            st.markdown("---")
+            st.markdown("### 📊 Comprehensive Attack Analysis")
+            
+            top_attack = detected_attacks[0]
+            attack_id = top_attack['attack_id']
+            
+            # Determine current stage based on attack chains
+            # Determine current stage based on behavioral analysis
+            current_stage = 1  # Default: Reconnaissance
+            
+            # Stage detection based on attack type
+            if attack_id == "ATK-AUTH-001":  # Brute Force
+                if log_patterns['failed_logins'] > 50:
+                    current_stage = 3  # Successful authentication likely
+                elif log_patterns['failed_logins'] > 20:
+                    current_stage = 2  # Active brute forcing
+                else:
+                    current_stage = 1  # Initial attempts
+                    
+            elif attack_id == "ATK-INJ-001":  # SQL Injection
+                # Check for data extraction indicators
+                if log_patterns.get('high_data_transfer', 0) > 5:
+                    current_stage = 4  # Data exfiltration stage
+                elif log_patterns['sql_keywords'] > 15:
+                    current_stage = 3  # Database enumeration
+                elif log_patterns['sql_keywords'] > 5:
+                    current_stage = 2  # Exploitation attempts
+                else:
+                    current_stage = 1  # Initial probing
+                    
+            elif attack_id == "ATK-MAL-001":  # Ransomware
+                # Check ransomware progression
+                if log_patterns.get('ransom_note_files', 0) > 0:
+                    current_stage = 5  # Ransom demand (final stage)
+                elif log_patterns.get('encrypted_extensions', 0) > 10:
+                    current_stage = 5  # Mass encryption in progress
+                elif log_patterns.get('shadow_copy_deletion', 0) > 0:
+                    current_stage = 3  # Removing recovery options
+                elif log_patterns.get('mass_file_modifications', 0) > 50:
+                    current_stage = 4  # Lateral movement/encryption starting
+                else:
+                    current_stage = 2  # Initial compromise
+            
+            # Use attack chains as additional indicator
+            if len(chains) > 2:
+                current_stage = min(current_stage + 1, 5)  # Advance stage but cap at 5
+            
+            # Get full analysis
+            full_analysis = manager.get_full_attack_analysis(attack_id, current_stage)
+            
+            # Overview
+            st.markdown("#### 🎯 Attack Overview")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.metric("Attack Type", full_analysis['attack_overview']['category'])
+            with col2:
+                st.metric("Current Stage", f"{current_stage}/{full_analysis['attack_stages']['total_stages']}")
+            with col3:
+                st.metric("Typical Duration", full_analysis['timing_analysis']['typical_duration'])
+            with col4:
+                st.metric("Attack Speed", full_analysis['timing_analysis']['attack_speed'])
+            
+            st.markdown(f"**Description:** {full_analysis['attack_overview']['description']}")
+            
+            # Next Stage Prediction
+            st.markdown("---")
+            st.markdown("### 🔮 Next Stage Prediction")
+            
+            prediction = manager.predict_next_stage(attack_id, current_stage)
+            
+            if prediction.get('next_stage', {}).get('stage_name'):
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Next Stage", prediction['next_stage']['stage_name'])
+                with col2:
+                    st.metric("Probability", prediction['next_stage']['probability'])
+                with col3:
+                    st.metric("Next Stage Severity", prediction['next_stage']['severity'])
+                
+                # Timing prediction
+                st.markdown("#### ⏰ Timing Prediction")
+                timing = prediction['timing']
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.info(f"**Earliest:** {timing['predicted_time_window']['earliest']}")
+                with col2:
+                    st.warning(f"**Most Likely:** {timing['predicted_time_window']['most_likely']}")
+                with col3:
+                    st.error(f"**Latest:** {timing['predicted_time_window']['latest']}")
+                
+                st.write(f"⏱️ **Detection Window Remaining:** {timing['detection_window_remaining']} minutes")
+                
+                # Target prediction
+                st.markdown("#### 🎯 Likely Target")
+                target = prediction['likely_targets']
+                if target['primary']:
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.error(f"**Primary Target:** {target['primary']}")
+                        st.write(f"**Probability:** {target['probability']}")
+                    with col2:
+                        st.error(f"**Estimated Damage:** {target['estimated_damage']}")
+                
+                # Point of no return
+                st.markdown("---")
+                st.markdown("### ⚠️ Point of No Return")
+                ponr = prediction['point_of_no_return']
+                
+                if ponr['can_still_stop']:
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.success(f"**Status:** {ponr['status']}")
+                    with col2:
+                        st.warning(f"**Time Remaining:** {ponr['minutes_remaining']} minutes")
+                    with col3:
+                        st.info(f"**Stages Until PONR:** {ponr['stages_remaining']}")
+                    
+                    st.write(f"🚨 **Critical Time:** {ponr['critical_time']}")
+                else:
+                    st.error("🚨 **CRITICAL:** Attack has reached point of no return!")
+            
+            # Recommended Actions
+            st.markdown("---")
+            st.markdown("### 🛡️ Recommended Immediate Actions")
+            
+            actions = prediction.get('recommended_actions', [])
+            if actions:
+                for i, action in enumerate(actions, 1):
+                    with st.container():
+                        col1, col2, col3 = st.columns([3, 1, 1])
+                        with col1:
+                            st.write(f"**{i}. {action['action']}**")
+                        with col2:
+                            st.success(f"✅ {action['effectiveness']}")
+                        with col3:
+                            st.info(f"⏱️ {action['time']}")
+            
+            # Attacker Profile Analysis
+            # Attacker Profile Analysis
+            st.markdown("---")
+            st.markdown("### 👤 Attacker Profile Analysis")
+            
+            # Smart behavioral analysis based on attack type and sophistication
+            behavioral_data = {}
+            
+            # Determine automation usage
+            if attack_id == "ATK-AUTH-001":  # Brute Force
+                behavioral_data['uses_automation'] = log_patterns.get('failed_logins', 0) > 30
+                behavioral_data['persistence'] = 'low' if log_patterns.get('failed_logins', 0) < 30 else 'medium'
+                behavioral_data['tools_used'] = ['hydra', 'automated_tools'] if log_patterns.get('failed_logins', 0) > 50 else ['manual_tools']
+                
+            elif attack_id == "ATK-INJ-001":  # SQL Injection
+                sql_count = log_patterns.get('sql_keywords', 0)
+                behavioral_data['uses_automation'] = sql_count > 10
+                
+                # Sophistication based on number and variety of SQL attacks
+                if sql_count > 20 and log_patterns.get('high_data_transfer', 0) > 3:
+                    behavioral_data['persistence'] = 'high'  # Cybercriminal
+                    behavioral_data['tools_used'] = ['sqlmap', 'custom_scripts', 'automated_tools']
+                elif sql_count > 10:
+                    behavioral_data['persistence'] = 'medium'  # Intermediate
+                    behavioral_data['tools_used'] = ['sqlmap', 'automated_tools']
+                else:
+                    behavioral_data['persistence'] = 'low'  # Script Kiddie
+                    behavioral_data['tools_used'] = ['manual_tools', 'sqlmap']
+                    
+            elif attack_id == "ATK-MAL-001":  # Ransomware
+                behavioral_data['uses_automation'] = True  # Ransomware is always automated
+                
+                # Sophistication based on tactics
+                ransom_indicators = (
+                    log_patterns.get('ransom_note_files', 0) +
+                    log_patterns.get('shadow_copy_deletion', 0) +
+                    log_patterns.get('backup_deletion', 0)
+                )
+                
+                if ransom_indicators >= 3 and log_patterns.get('encrypted_extensions', 0) > 10:
+                    behavioral_data['persistence'] = 'high'  # Professional ransomware gang
+                    behavioral_data['tools_used'] = ['custom_ransomware', 'automated_tools', 'lateral_movement_tools']
+                else:
+                    behavioral_data['persistence'] = 'medium'  # Ransomware-as-a-Service user
+                    behavioral_data['tools_used'] = ['ransomware_kit', 'automated_tools']
+            else:
+                # Default
+                behavioral_data['uses_automation'] = True
+                behavioral_data['persistence'] = 'medium'
+                behavioral_data['tools_used'] = ['automated_tools']
+            
+            # Track covering detection
+            covers_tracks_count = 0
+            if 'action' in anomaly_df.columns:
+                covers_tracks_count = len(anomaly_df[
+                    anomaly_df['action'].str.contains('delete|clear|remove|wipe', case=False, na=False)
+                ])
+            if 'resource' in anomaly_df.columns:
+                covers_tracks_count += len(anomaly_df[
+                    anomaly_df['resource'].str.contains('log|audit|history', case=False, na=False)
+                ])
+            
+            behavioral_data['covers_tracks'] = covers_tracks_count > 5
+            
+            # Adjust persistence based on attack chains
+            if len(chains) > 3:
+                if behavioral_data['persistence'] == 'low':
+                    behavioral_data['persistence'] = 'medium'
+                elif behavioral_data['persistence'] == 'medium':
+                    behavioral_data['persistence'] = 'high'
+            
+            try:
+                attacker_analysis = manager.analyze_behavioral_data(behavioral_data)
+                
+                if attacker_analysis and 'identified_attacker' in attacker_analysis:
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Attacker Type", attacker_analysis['identified_attacker']['type'])
+                    with col2:
+                        st.metric("Confidence", attacker_analysis['identified_attacker']['confidence'])
+                    with col3:
+                        st.metric("Skill Level", attacker_analysis['identified_attacker']['skill_level'])
+                    with col4:
+                        st.metric("Sophistication", attacker_analysis['identified_attacker']['sophistication'])
+                    
+                    if attacker_analysis.get('likely_next_actions'):
+                        st.markdown("**Likely Next Actions:**")
+                        for action in attacker_analysis['likely_next_actions'][:5]:
+                            st.write(f"• {action}")
+                    
+                    st.markdown("**Behavioral Characteristics:**")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write(f"• **Prefers Stealth:** {attacker_analysis['expected_behaviors']['prefers_stealth']}")
+                        st.write(f"• **Covers Tracks:** {attacker_analysis['expected_behaviors']['covers_tracks']}")
+                    with col2:
+                        st.write(f"• **Typical Duration:** {attacker_analysis['expected_behaviors']['typical_duration']}")
+                        st.write(f"• **Success Rate:** {attacker_analysis['expected_behaviors']['success_rate']}")
+                else:
+                    st.info("ℹ️ Insufficient behavioral data to profile attacker with confidence.")
+                    
+            except Exception as e:
+                st.warning(f"⚠️ Attacker profiling unavailable: Limited behavioral indicators in logs")
+                st.info("💡 **Note:** More log data would enable detailed attacker profiling")
+        
+            # Full Attack Details
+            st.markdown("---")
+            st.markdown("### 📚 Complete Attack Intelligence")
+            
+            with st.expander("🔍 View Complete Attack Stages", expanded=False):
+                for stage in full_analysis['attack_stages']['stages']:
+                    stage_num = stage['number']
+                    stage_status = "✅ COMPLETED" if stage_num < current_stage else "🔄 CURRENT" if stage_num == current_stage else "⏳ UPCOMING"
+                    
+                    st.markdown(f"**Stage {stage_num}: {stage['name']}** {stage_status}")
+                    st.write(f"• Description: {stage['description']}")
+                    st.write(f"• Duration: {stage['duration']}")
+                    st.write(f"• Success Rate: {stage['success_rate']}")
+                    st.markdown("---")
+            
+            with st.expander("🎯 Attacker Motivations & Goals", expanded=False):
+                st.markdown("**Primary Motivation:**")
+                st.write(full_analysis['attacker_motivations']['primary_motivation'])
+                
+                st.markdown("**End Goals:**")
+                for goal in full_analysis['attacker_motivations']['end_goals']:
+                    st.write(f"• {goal}")
+                
+                st.markdown("**Monetization Methods:**")
+                for method in full_analysis['attacker_motivations']['monetization']:
+                    st.write(f"• {method}")
+            
+            with st.expander("🛡️ Available Defensive Strategies", expanded=False):
+                st.write(f"**Total Countermeasures Available:** {full_analysis['defensive_strategy']['total_countermeasures']}")
+                st.write(f"**Overall Defense Effectiveness:** {full_analysis['defensive_strategy']['overall_effectiveness']}")
+                
+                st.markdown("**Immediate Actions You Can Take:**")
+                for action in full_analysis['defensive_strategy']['immediate_actions'][:5]:
+                    st.write(f"• **{action['action']}** (Effectiveness: {action['effectiveness']}, Time: {action['time']})")
+            
+            with st.expander("💥 Impact Assessment", expanded=False):
+                impact = full_analysis['impact_assessment']
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Confidentiality Impact", impact['confidentiality'])
+                with col2:
+                    st.metric("Integrity Impact", impact['integrity'])
+                with col3:
+                    st.metric("Availability Impact", impact['availability'])
+
+            st.session_state.prediction_results = {
+                'detected_attacks': detected_attacks,
+                'next_stage_prediction': prediction if prediction.get('next_stage', {}).get('stage_name') else None,
+                'point_of_no_return': prediction.get('point_of_no_return'),
+                'attacker_profile': attacker_analysis if 'attacker_analysis' in locals() else None,
+                'recommended_actions': prediction.get('recommended_actions', []),
+                'full_analysis': full_analysis
+            }
+        
+        else:
+            st.success("ZERO DAY ATTACK (No attacks detected based on current log patterns)")
+            st.info("The system analyzed your logs but found no patterns matching known attack types.")
+            st.session_state.prediction_results = None
+
+    with tab6:
         # --- Forensic Report Tab ---
         from modules.report_generator import generate_forensic_report
         st.success("✅ Ready to generate forensic report")
@@ -479,12 +918,15 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
                     correlation_results = st.session_state.get('correlation_results', None)
                     timeline_results = st.session_state.get('timeline_results', None)
                     log_stats = st.session_state.get('log_stats', None)
+                    prediction_results = st.session_state.get('prediction_results', None)
                     report = generate_forensic_report(
                         logs_df=logs_df,
                         anomaly_df=anomaly_df,
                         correlation_results=correlation_results,
                         timeline_results=timeline_results,
-                        log_stats=log_stats
+                        log_stats=log_stats,
+                        prediction_results=prediction_results
+
                     )
                     st.session_state.forensic_report = report
                     st.success("✅ Forensic report generated successfully!")
@@ -499,12 +941,14 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
                 correlation_results = st.session_state.get('correlation_results', None)
                 timeline_results = st.session_state.get('timeline_results', None)
                 log_stats = st.session_state.get('log_stats', None)
+                prediction_results = st.session_state.get('prediction_results', None)
                 report = generate_forensic_report(
                     logs_df=logs_df,
                     anomaly_df=anomaly_df,
                     correlation_results=correlation_results,
                     timeline_results=timeline_results,
-                    log_stats=log_stats
+                    log_stats=log_stats,
+                    prediction_results=prediction_results
                 )
                 st.session_state.forensic_report = report
             except Exception as e:
@@ -625,18 +1069,29 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
         
         st.markdown("### 📊 Report Statistics")
         col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            word_count = len(report.split())
-            st.metric("Word Count", f"{word_count:,}")
-        with col2:
-            line_count = len(report.split('\n'))
-            st.metric("Lines", f"{line_count:,}")
-        with col3:
-            char_count = len(report)
-            st.metric("Characters", f"{char_count:,}")
-        with col4:
-            reading_time = max(1, word_count // 200)
-            st.metric("Reading Time", f"{reading_time} min")
+        
+        if report:  # Only show stats if report exists
+            with col1:
+                word_count = len(report.split())
+                st.metric("Word Count", f"{word_count:,}")
+            with col2:
+                line_count = len(report.split('\n'))
+                st.metric("Lines", f"{line_count:,}")
+            with col3:
+                char_count = len(report)
+                st.metric("Characters", f"{char_count:,}")
+            with col4:
+                reading_time = max(1, word_count // 200)
+                st.metric("Reading Time", f"{reading_time} min")
+        else:
+            with col1:
+                st.metric("Word Count", "0")
+            with col2:
+                st.metric("Lines", "0")
+            with col3:
+                st.metric("Characters", "0")
+            with col4:
+                st.metric("Reading Time", "0 min")
             
         st.markdown("### 🎯 Report Highlights")
         if st.session_state.anomalies is not None:

@@ -1,0 +1,545 @@
+{
+  "ATK-AUTH-001": {
+    "attack_id": "ATK-AUTH-001",
+    "attack_name": "Brute Force Attack",
+    "category": "Authentication Attacks",
+    "sub_category": "Credential-based",
+    "description": "Systematic trial of multiple password combinations to gain unauthorized access",
+    "typical_attacker": "Script Kiddie",
+    "primary_goal": "Unauthorized access to user accounts",
+    "secondary_goals": [
+      "Data theft",
+      "Lateral movement",
+      "System compromise",
+      "Privilege escalation"
+    ],
+    "base_severity": "HIGH",
+    "detection_difficulty": "EASY",
+    "prevalence": "VERY_COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "MEDIUM",
+    "availability_impact": "LOW",
+    "log_signatures": [
+      "Multiple failed login attempts",
+      "Rapid authentication requests",
+      "Sequential username testing",
+      "Common password patterns",
+      "Failed auth from single IP"
+    ],
+    "network_signatures": [
+      "High frequency of auth packets",
+      "Repeated connection attempts",
+      "Unusual timing patterns"
+    ],
+    "behavior_signatures": [
+      "Failed attempts > 10 in 5 minutes",
+      "Success after many failures",
+      "Off-hours login activity",
+      "Login from unusual location"
+    ],
+    "mitre_tactics": [
+      "TA0006: Credential Access"
+    ],
+    "mitre_techniques": [
+      "T1110: Brute Force",
+      "T1110.001: Password Guessing"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/techniques/T1110/",
+      "https://owasp.org/www-community/attacks/Brute_force_attack"
+    ]
+  },
+  "ATK-AUTH-002": {
+    "attack_id": "ATK-AUTH-002",
+    "attack_name": "Credential Stuffing",
+    "category": "Authentication Attacks",
+    "sub_category": "Credential-based",
+    "description": "Using stolen username/password pairs from data breaches to access accounts",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Account takeover using leaked credentials",
+    "secondary_goals": [
+      "Financial fraud",
+      "Identity theft",
+      "Data exfiltration",
+      "Account resale"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "MEDIUM",
+    "prevalence": "COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "HIGH",
+    "availability_impact": "LOW",
+    "log_signatures": [
+      "Multiple usernames, single password pattern",
+      "Successful login after few attempts",
+      "Login from uncommon user agent",
+      "Distributed IP sources",
+      "Credential validation attempts"
+    ],
+    "network_signatures": [
+      "Traffic from proxy/VPN services",
+      "Residential proxy usage",
+      "Multiple geolocations"
+    ],
+    "behavior_signatures": [
+      "Valid credentials from unusual location",
+      "Account access from new device",
+      "Immediate high-value actions post-login",
+      "Multiple account access from single IP"
+    ],
+    "mitre_tactics": [
+      "TA0006: Credential Access"
+    ],
+    "mitre_techniques": [
+      "T1110.004: Credential Stuffing"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/techniques/T1110/004/",
+      "https://owasp.org/www-community/attacks/Credential_stuffing"
+    ]
+  },
+  "ATK-AUTH-003": {
+    "attack_id": "ATK-AUTH-003",
+    "attack_name": "Password Spraying",
+    "category": "Authentication Attacks",
+    "sub_category": "Credential-based",
+    "description": "Attempting a few common passwords against many usernames to avoid account lockouts",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Gain access while avoiding detection",
+    "secondary_goals": [
+      "Initial foothold",
+      "Account enumeration",
+      "Privilege escalation",
+      "Lateral movement"
+    ],
+    "base_severity": "HIGH",
+    "detection_difficulty": "HARD",
+    "prevalence": "COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "MEDIUM",
+    "availability_impact": "LOW",
+    "log_signatures": [
+      "Multiple usernames, common passwords",
+      "Low failure rate per account",
+      "Distributed timing (avoids lockouts)",
+      "Same password across accounts",
+      "Seasonal password patterns (Summer2024!, etc.)"
+    ],
+    "network_signatures": [
+      "Slow, steady authentication requests",
+      "Multiple source IPs (botnet)",
+      "Cloud service origins"
+    ],
+    "behavior_signatures": [
+      "1-3 failed attempts per account",
+      "Long time between same-user attempts",
+      "High number of unique users targeted",
+      "Alphabetical username order"
+    ],
+    "mitre_tactics": [
+      "TA0006: Credential Access"
+    ],
+    "mitre_techniques": [
+      "T1110.003: Password Spraying"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/techniques/T1110/003/"
+    ]
+  },
+  "ATK-INJ-001": {
+    "attack_id": "ATK-INJ-001",
+    "attack_name": "SQL Injection",
+    "category": "Injection Attacks",
+    "sub_category": "Database Injection",
+    "description": "Inserting malicious SQL code into application queries to manipulate database",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Unauthorized database access and data extraction",
+    "secondary_goals": [
+      "Data modification",
+      "Authentication bypass",
+      "Command execution",
+      "Data destruction"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "MEDIUM",
+    "prevalence": "COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "HIGH",
+    "availability_impact": "MEDIUM",
+    "log_signatures": [
+      "SQL keywords in parameters",
+      "UNION SELECT statements",
+      "Database error messages",
+      "Encoded SQL payloads",
+      "information_schema queries",
+      "' OR '1'='1 patterns",
+      "Comment sequences (-- or /*)",
+      "Stacked queries (;)"
+    ],
+    "network_signatures": [
+      "Unusual query string lengths",
+      "Base64 encoded parameters",
+      "Hex encoded payloads"
+    ],
+    "behavior_signatures": [
+      "Multiple error responses",
+      "Long query execution times",
+      "Large result sets",
+      "Unusual database queries",
+      "Access to system tables"
+    ],
+    "mitre_tactics": [
+      "TA0001: Initial Access",
+      "TA0009: Collection"
+    ],
+    "mitre_techniques": [
+      "T1190: Exploit Public-Facing Application"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://owasp.org/www-community/attacks/SQL_Injection",
+      "https://portswigger.net/web-security/sql-injection"
+    ]
+  },
+  "ATK-INJ-002": {
+    "attack_id": "ATK-INJ-002",
+    "attack_name": "Cross-Site Scripting (XSS)",
+    "category": "Injection Attacks",
+    "sub_category": "Client-Side Injection",
+    "description": "Injecting malicious scripts into web pages viewed by other users",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Execute scripts in victim's browser context",
+    "secondary_goals": [
+      "Session hijacking",
+      "Credential theft",
+      "Defacement",
+      "Malware distribution"
+    ],
+    "base_severity": "HIGH",
+    "detection_difficulty": "MEDIUM",
+    "prevalence": "VERY_COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "MEDIUM",
+    "integrity_impact": "HIGH",
+    "availability_impact": "LOW",
+    "log_signatures": [
+      "<script> tags in parameters",
+      "JavaScript event handlers",
+      "Encoded script payloads",
+      "document.cookie access",
+      "window.location manipulation"
+    ],
+    "network_signatures": [
+      "Unusual characters in URLs",
+      "Multiple encoding layers",
+      "Script tags in POST data"
+    ],
+    "behavior_signatures": [
+      "Persistent script storage",
+      "Cookie exfiltration attempts",
+      "DOM manipulation",
+      "External script loading"
+    ],
+    "mitre_tactics": [
+      "TA0001: Initial Access",
+      "TA0009: Collection"
+    ],
+    "mitre_techniques": [
+      "T1189: Drive-by Compromise"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://owasp.org/www-community/attacks/xss/",
+      "https://portswigger.net/web-security/cross-site-scripting"
+    ]
+  },
+  "ATK-INJ-003": {
+    "attack_id": "ATK-INJ-003",
+    "attack_name": "Command Injection",
+    "category": "Injection Attacks",
+    "sub_category": "OS Command Injection",
+    "description": "Executing arbitrary operating system commands on the server",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Execute system commands for full server compromise",
+    "secondary_goals": [
+      "Data exfiltration",
+      "Malware installation",
+      "Backdoor creation",
+      "Lateral movement"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "MEDIUM",
+    "prevalence": "UNCOMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": true,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "HIGH",
+    "availability_impact": "HIGH",
+    "log_signatures": [
+      "Shell metacharacters (;|&)",
+      "System command names",
+      "File system commands",
+      "Network utility calls",
+      "Process execution attempts"
+    ],
+    "network_signatures": [
+      "Reverse shell connections",
+      "Unusual outbound traffic",
+      "Non-standard ports"
+    ],
+    "behavior_signatures": [
+      "Unexpected process creation",
+      "File system modifications",
+      "Network connections from web app",
+      "Privilege escalation attempts"
+    ],
+    "mitre_tactics": [
+      "TA0002: Execution"
+    ],
+    "mitre_techniques": [
+      "T1059: Command and Scripting Interpreter"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://owasp.org/www-community/attacks/Command_Injection"
+    ]
+  },
+  "ATK-MAL-001": {
+    "attack_id": "ATK-MAL-001",
+    "attack_name": "Ransomware Attack",
+    "category": "Malware Attacks",
+    "sub_category": "Encryption Malware",
+    "description": "Encrypting victim's files and demanding payment for decryption key",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Financial extortion through data encryption",
+    "secondary_goals": [
+      "Data destruction",
+      "Reputation damage",
+      "Business disruption",
+      "Double extortion (data leak threat)"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "MEDIUM",
+    "prevalence": "COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": false,
+    "host_based": true,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "HIGH",
+    "availability_impact": "HIGH",
+    "log_signatures": [
+      "Mass file modifications",
+      "File extension changes",
+      "Ransom note creation",
+      "Shadow copy deletion",
+      "Backup service termination"
+    ],
+    "network_signatures": [
+      "Encryption key negotiation",
+      "C2 server communication",
+      "Tor network usage",
+      "Cryptocurrency payment requests"
+    ],
+    "behavior_signatures": [
+      "Rapid file encryption",
+      "High CPU/disk usage",
+      "Process injection",
+      "Registry modifications",
+      "Network share enumeration"
+    ],
+    "mitre_tactics": [
+      "TA0040: Impact"
+    ],
+    "mitre_techniques": [
+      "T1486: Data Encrypted for Impact"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/techniques/T1486/"
+    ]
+  },
+  "ATK-DATA-001": {
+    "attack_id": "ATK-DATA-001",
+    "attack_name": "Data Exfiltration",
+    "category": "Data Breach Attacks",
+    "sub_category": "Data Theft",
+    "description": "Unauthorized copying and transfer of sensitive data out of the organization",
+    "typical_attacker": "Advanced Persistent Threat",
+    "primary_goal": "Steal sensitive, valuable, or classified information",
+    "secondary_goals": [
+      "Competitive espionage",
+      "Financial gain",
+      "Identity theft",
+      "Blackmail material"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "HARD",
+    "prevalence": "COMMON",
+    "requires_authentication": true,
+    "requires_privileges": true,
+    "network_based": true,
+    "host_based": true,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "LOW",
+    "availability_impact": "LOW",
+    "log_signatures": [
+      "Large data downloads",
+      "Bulk file access",
+      "Database dumps",
+      "Archive file creation",
+      "USB device connections",
+      "Cloud upload activity"
+    ],
+    "network_signatures": [
+      "Unusual outbound traffic volume",
+      "Encrypted channels to external IPs",
+      "DNS tunneling",
+      "Non-standard protocol usage"
+    ],
+    "behavior_signatures": [
+      "After-hours data access",
+      "Access to unusual file types",
+      "Sequential file access",
+      "Failed permission attempts followed by success"
+    ],
+    "mitre_tactics": [
+      "TA0010: Exfiltration"
+    ],
+    "mitre_techniques": [
+      "T1041: Exfiltration Over C2 Channel",
+      "T1567: Exfiltration Over Web Service"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/tactics/TA0010/"
+    ]
+  },
+  "ATK-PRIV-001": {
+    "attack_id": "ATK-PRIV-001",
+    "attack_name": "Vertical Privilege Escalation",
+    "category": "Privilege Escalation",
+    "sub_category": "Permission Abuse",
+    "description": "Gaining higher-level privileges than originally assigned",
+    "typical_attacker": "Cybercriminal",
+    "primary_goal": "Elevate access from user to admin/root",
+    "secondary_goals": [
+      "System compromise",
+      "Defense evasion",
+      "Persistence",
+      "Full control"
+    ],
+    "base_severity": "CRITICAL",
+    "detection_difficulty": "HARD",
+    "prevalence": "COMMON",
+    "requires_authentication": true,
+    "requires_privileges": false,
+    "network_based": false,
+    "host_based": true,
+    "confidentiality_impact": "HIGH",
+    "integrity_impact": "HIGH",
+    "availability_impact": "HIGH",
+    "log_signatures": [
+      "sudo command usage",
+      "User permission changes",
+      "Group membership modifications",
+      "Service account compromise",
+      "Kernel module loading"
+    ],
+    "network_signatures": [],
+    "behavior_signatures": [
+      "Unusual admin actions from regular account",
+      "Permission enumeration",
+      "Exploit attempts",
+      "Binary execution from unusual locations"
+    ],
+    "mitre_tactics": [
+      "TA0004: Privilege Escalation"
+    ],
+    "mitre_techniques": [
+      "T1068: Exploitation for Privilege Escalation"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/tactics/TA0004/"
+    ]
+  },
+  "ATK-DOS-001": {
+    "attack_id": "ATK-DOS-001",
+    "attack_name": "Distributed Denial of Service (DDoS)",
+    "category": "Denial of Service",
+    "sub_category": "Network Flooding",
+    "description": "Overwhelming target with traffic from multiple sources to cause service disruption",
+    "typical_attacker": "Hacktivist",
+    "primary_goal": "Make services unavailable to legitimate users",
+    "secondary_goals": [
+      "Business disruption",
+      "Distraction for other attacks",
+      "Reputation damage",
+      "Financial losses"
+    ],
+    "base_severity": "HIGH",
+    "detection_difficulty": "EASY",
+    "prevalence": "COMMON",
+    "requires_authentication": false,
+    "requires_privileges": false,
+    "network_based": true,
+    "host_based": false,
+    "confidentiality_impact": "NONE",
+    "integrity_impact": "NONE",
+    "availability_impact": "HIGH",
+    "log_signatures": [
+      "Spike in connection requests",
+      "High volume from single/multiple IPs",
+      "Repeated identical requests",
+      "Malformed packets",
+      "Resource exhaustion"
+    ],
+    "network_signatures": [
+      "Traffic from botnets",
+      "SYN flood patterns",
+      "UDP amplification",
+      "Application layer floods"
+    ],
+    "behavior_signatures": [
+      "Service degradation",
+      "Timeout errors",
+      "Memory/CPU saturation",
+      "Bandwidth exhaustion"
+    ],
+    "mitre_tactics": [
+      "TA0040: Impact"
+    ],
+    "mitre_techniques": [
+      "T1498: Network Denial of Service"
+    ],
+    "cve_references": [],
+    "documentation_links": [
+      "https://attack.mitre.org/techniques/T1498/"
+    ]
+  }
+}

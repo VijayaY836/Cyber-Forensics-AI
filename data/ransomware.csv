@@ -1,0 +1,31 @@
+timestamp,user,action,resource,ip_address,result,user_agent,session_id,bytes_transferred,protocol
+2024-12-29 02:00:00,workstation01,file_modify,/docs/report1.docx.encrypted,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:01,workstation01,file_modify,/docs/report2.xlsx.locked,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:02,workstation01,file_modify,/docs/report3.pdf.crypto,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:03,workstation01,file_modify,/docs/image1.jpg.crypt,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:04,workstation01,file_modify,/docs/notes.txt.cerber,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:05,workstation01,file_modify,/docs/archive.zip.encrypted,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:06,workstation01,file_modify,/docs/design.psd.locked,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:07,workstation01,file_modify,/docs/code.py.crypto,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:08,workstation01,file_modify,/docs/data.csv.encrypted,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+2024-12-29 02:00:09,workstation01,file_modify,/docs/slides.pptx.locked,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,4096,LOCAL
+
+2024-12-29 02:00:15,workstation01,file_create,/docs/README.txt,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,1024,LOCAL
+2024-12-29 02:00:16,workstation01,file_create,/docs/HOW_TO_DECRYPT.html,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,2048,LOCAL
+
+2024-12-29 02:00:30,workstation01,command_exec,vssadmin delete shadows /all /quiet,192.168.1.99,SUCCESS,cmd.exe,rsess_001,0,LOCAL
+2024-12-29 02:00:35,workstation01,command_exec,vssadmin delete shadows /all /quiet,192.168.1.99,SUCCESS,cmd.exe,rsess_001,0,LOCAL
+
+2024-12-29 02:01:00,workstation01,service_stop,WinDefend,192.168.1.99,SUCCESS,powershell.exe,rsess_001,0,LOCAL
+2024-12-29 02:01:05,workstation01,service_stop,SecurityHealthService,192.168.1.99,SUCCESS,sc.exe,rsess_001,0,LOCAL
+
+2024-12-29 02:01:30,workstation01,process_exec,mimikatz.exe,192.168.1.99,SUCCESS,mimikatz.exe,rsess_001,0,LOCAL
+
+2024-12-29 02:02:00,workstation01,file_modify,/share/finance.xls.encrypted,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,8192,SMB
+2024-12-29 02:02:01,workstation01,file_modify,/share/hr.db.locked,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,8192,SMB
+2024-12-29 02:02:02,workstation01,file_modify,/share/payroll.csv.crypto,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,8192,SMB
+
+2024-12-29 02:02:30,workstation01,file_modify,/backup/monthly.bak.encrypted,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,16384,LOCAL
+2024-12-29 02:02:31,workstation01,file_modify,/backup/weekly.bak.locked,192.168.1.99,SUCCESS,encryptor/1.0,rsess_001,16384,LOCAL
+
+2024-12-29 02:03:00,security_system,alert,RANSOMWARE_ATTACK_DETECTED,0.0.0.0,SUCCESS,SOC_ENGINE,alert_003,0,INTERNAL

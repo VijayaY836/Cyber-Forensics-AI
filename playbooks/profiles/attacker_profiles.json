@@ -1,0 +1,842 @@
+{
+  "PROFILE-001": {
+    "profile_id": "PROFILE-001",
+    "attacker_type": "Script Kiddie",
+    "description": "Novice attackers using pre-made tools without deep understanding",
+    "prevalence": "VERY_COMMON",
+    "characteristics": {
+      "skill_level": "Beginner",
+      "resource_level": "Minimal",
+      "persistence_level": "Gives Up Quickly",
+      "custom_tool_development": false,
+      "zero_day_access": false,
+      "uses_automation": true,
+      "encryption_capability": false,
+      "operates_in_groups": false,
+      "profit_motivated": false,
+      "ideology_motivated": false,
+      "state_sponsored": false,
+      "risk_tolerance": "HIGH",
+      "patience": "LOW",
+      "sophistication": "LOW"
+    },
+    "attack_patterns": {
+      "preferred_attack_types": [
+        "Brute Force",
+        "Basic SQL Injection",
+        "DDoS",
+        "Defacement",
+        "Credential Stuffing"
+      ],
+      "common_tools": [
+        "Metasploit",
+        "SQLmap",
+        "Hydra",
+        "Nmap",
+        "Burp Suite (free version)",
+        "LOIC/HOIC (DDoS)",
+        "John the Ripper",
+        "Aircrack-ng"
+      ],
+      "typical_targets": [
+        "Small businesses",
+        "Personal websites",
+        "Poorly secured services",
+        "Known vulnerable systems",
+        "Random targets of opportunity"
+      ],
+      "prefers_stealth": false,
+      "willing_to_be_noisy": true,
+      "covers_tracks": false,
+      "uses_obfuscation": false,
+      "preferred_attack_times": [
+        "After school hours (3 PM - 11 PM)",
+        "Weekends",
+        "No strategic timing"
+      ],
+      "average_attack_duration": "15-60 minutes",
+      "typical_success_rate": 0.1,
+      "common_failure_reasons": [
+        "Gives up after initial failure",
+        "Basic security stops them",
+        "Lacks troubleshooting skills",
+        "Detection is easy",
+        "Limited tool knowledge"
+      ]
+    },
+    "behavioral_indicators": {
+      "reconnaissance_style": "Shallow, obvious scanning",
+      "exploitation_style": "Brute force, trial-and-error",
+      "post_exploitation_behavior": [
+        "Simple defacement",
+        "Bragging on forums",
+        "No cleanup",
+        "Leaves obvious traces"
+      ],
+      "log_patterns": [
+        "Default tool user agents",
+        "Sequential, obvious attempts",
+        "No evasion techniques",
+        "Multiple failed attempts",
+        "Recognizable tool signatures"
+      ],
+      "network_patterns": [
+        "Single source IP",
+        "No proxy/VPN usage",
+        "High volume, low sophistication",
+        "Default port scanning patterns"
+      ],
+      "timing_patterns": [
+        "Random timing",
+        "No strategic timing",
+        "Consistent with home internet usage patterns"
+      ],
+      "signature_behaviors": [
+        "Uses default tool settings",
+        "Doesn't modify exploits",
+        "Gives up quickly on failure",
+        "Attacks well-known vulnerabilities only",
+        "No post-exploitation activity"
+      ]
+    },
+    "decision_making": {
+      "when_to_proceed": [
+        "Initial scan shows open ports",
+        "Error messages are visible",
+        "Default credentials work"
+      ],
+      "when_to_abort": [
+        "First few attempts fail",
+        "Basic security detected",
+        "Tool doesn't work immediately",
+        "Gets bored (10-15 minutes)"
+      ],
+      "when_to_retry": [
+        "Found new tool",
+        "Saw tutorial online",
+        "Someone suggested different approach"
+      ],
+      "adapts_to_defenses": false,
+      "changes_tactics": false,
+      "learns_from_failures": false,
+      "risk_calculation": "NONE"
+    },
+    "typical_organizations": [
+      "Teenagers",
+      "Young adults",
+      "Hobbyists",
+      "People seeking notoriety"
+    ],
+    "motivations": [
+      "Learning/curiosity",
+      "Proving skills",
+      "Peer recognition",
+      "Boredom",
+      "Thrill-seeking"
+    ],
+    "end_goals": [
+      "Successful attack (any kind)",
+      "Bragging rights",
+      "Forum recognition",
+      "Learning experience"
+    ],
+    "real_world_examples": [
+      "Website defacements",
+      "Basic DDoS attacks",
+      "Random port scanning",
+      "Publicly disclosed vulnerability exploitation"
+    ],
+    "case_studies": [
+      "Anonymous member arrested using LOIC without VPN",
+      "Teenager defaces school website using SQLmap",
+      "Script kiddie arrested for DDoS using public tools"
+    ]
+  },
+  "PROFILE-002": {
+    "profile_id": "PROFILE-002",
+    "attacker_type": "Cybercriminal",
+    "description": "Profit-motivated attackers with moderate to high skills",
+    "prevalence": "COMMON",
+    "characteristics": {
+      "skill_level": "Intermediate",
+      "resource_level": "Moderate",
+      "persistence_level": "Persistent",
+      "custom_tool_development": true,
+      "zero_day_access": false,
+      "uses_automation": true,
+      "encryption_capability": true,
+      "operates_in_groups": true,
+      "profit_motivated": true,
+      "ideology_motivated": false,
+      "state_sponsored": false,
+      "risk_tolerance": "MEDIUM",
+      "patience": "MEDIUM",
+      "sophistication": "MEDIUM"
+    },
+    "attack_patterns": {
+      "preferred_attack_types": [
+        "Ransomware",
+        "Data theft",
+        "Credential harvesting",
+        "Business Email Compromise",
+        "SQL Injection",
+        "Cryptojacking",
+        "Banking trojans"
+      ],
+      "common_tools": [
+        "Custom malware",
+        "Commercial exploit kits",
+        "Ransomware-as-a-Service",
+        "Phishing kits",
+        "Cobalt Strike",
+        "Mimikatz",
+        "PowerShell Empire",
+        "Modified open-source tools"
+      ],
+      "typical_targets": [
+        "SMBs with payment data",
+        "Healthcare organizations",
+        "Financial services",
+        "E-commerce sites",
+        "Anyone with valuable data",
+        "Organizations with poor security"
+      ],
+      "prefers_stealth": true,
+      "willing_to_be_noisy": false,
+      "covers_tracks": true,
+      "uses_obfuscation": true,
+      "preferred_attack_times": [
+        "Off-hours (to avoid detection)",
+        "Weekends",
+        "Holidays",
+        "Friday evenings (ransomware deployment)"
+      ],
+      "average_attack_duration": "Hours to days",
+      "typical_success_rate": 0.35,
+      "common_failure_reasons": [
+        "Detected by security tools",
+        "Strong security controls",
+        "Incident response too fast",
+        "Insufficient privileges gained"
+      ]
+    },
+    "behavioral_indicators": {
+      "reconnaissance_style": "Thorough, targeted research",
+      "exploitation_style": "Multiple vectors, patient testing",
+      "post_exploitation_behavior": [
+        "Privilege escalation",
+        "Lateral movement",
+        "Data exfiltration",
+        "Persistence mechanisms",
+        "Some log cleanup",
+        "Monetization focus"
+      ],
+      "log_patterns": [
+        "Modified user agents",
+        "Some evasion attempts",
+        "VPN/proxy usage",
+        "Legitimate-looking traffic",
+        "Encrypted communications"
+      ],
+      "network_patterns": [
+        "Multiple IPs (VPN rotation)",
+        "Residential proxies",
+        "Encrypted C2 channels",
+        "DNS tunneling",
+        "Legitimate cloud services for C2"
+      ],
+      "timing_patterns": [
+        "Strategic timing (off-hours)",
+        "Staged attack progression",
+        "Patience between stages",
+        "Friday evening ransomware deployment"
+      ],
+      "signature_behaviors": [
+        "Profit-driven target selection",
+        "Ransom demands",
+        "Data theft before destruction",
+        "Cryptocurrency payment demands",
+        "Professional communication (ransom notes)",
+        "Negotiation willingness"
+      ]
+    },
+    "decision_making": {
+      "when_to_proceed": [
+        "Weak security detected",
+        "Valuable data identified",
+        "Good profit potential",
+        "Low detection risk",
+        "Vulnerability confirmed"
+      ],
+      "when_to_abort": [
+        "Strong security detected",
+        "Active incident response",
+        "Law enforcement attention",
+        "Low value target",
+        "High risk of identification"
+      ],
+      "when_to_retry": [
+        "Different attack vector available",
+        "New vulnerability discovered",
+        "Better tools acquired",
+        "Target security weakened"
+      ],
+      "adapts_to_defenses": true,
+      "changes_tactics": true,
+      "learns_from_failures": true,
+      "risk_calculation": "MODERATE"
+    },
+    "typical_organizations": [
+      "Organized crime groups",
+      "Ransomware gangs (REvil, Conti, LockBit)",
+      "RaaS affiliates",
+      "Dark web marketplace operators",
+      "BEC fraud groups"
+    ],
+    "motivations": [
+      "Financial profit (primary)",
+      "Building reputation",
+      "Growing criminal enterprise",
+      "Lifestyle funding"
+    ],
+    "end_goals": [
+      "Ransom payment",
+      "Data sale on dark web",
+      "Credential theft for fraud",
+      "Banking trojan deployment",
+      "Cryptojacking for passive income",
+      "BEC wire fraud"
+    ],
+    "real_world_examples": [
+      "REvil ransomware attacks",
+      "Colonial Pipeline ransomware",
+      "JBS Foods ransomware",
+      "BEC attacks costing millions",
+      "Magecart credit card skimming"
+    ],
+    "case_studies": [
+      "REvil gang demanding $70M from Kaseya",
+      "Conti ransomware gang internal chat leaks",
+      "BEC scam nets $2.3M from real estate firm"
+    ]
+  },
+  "PROFILE-003": {
+    "profile_id": "PROFILE-003",
+    "attacker_type": "Advanced Persistent Threat (APT)",
+    "description": "Nation-state or highly sophisticated actors with unlimited resources",
+    "prevalence": "RARE",
+    "characteristics": {
+      "skill_level": "Expert",
+      "resource_level": "Unlimited",
+      "persistence_level": "Extremely Persistent",
+      "custom_tool_development": true,
+      "zero_day_access": true,
+      "uses_automation": true,
+      "encryption_capability": true,
+      "operates_in_groups": true,
+      "profit_motivated": false,
+      "ideology_motivated": false,
+      "state_sponsored": true,
+      "risk_tolerance": "LOW",
+      "patience": "HIGH",
+      "sophistication": "ADVANCED"
+    },
+    "attack_patterns": {
+      "preferred_attack_types": [
+        "Spear phishing",
+        "Supply chain attacks",
+        "Zero-day exploitation",
+        "Long-term espionage",
+        "Advanced malware",
+        "Living off the land (LOTL)",
+        "Fileless attacks"
+      ],
+      "common_tools": [
+        "Custom malware frameworks",
+        "Zero-day exploits",
+        "Custom C2 infrastructure",
+        "Legitimate admin tools (abused)",
+        "Advanced rootkits",
+        "Memory-only malware",
+        "Nation-state grade tools"
+      ],
+      "typical_targets": [
+        "Government agencies",
+        "Defense contractors",
+        "Critical infrastructure",
+        "Large corporations",
+        "Research institutions",
+        "Political organizations",
+        "Telecommunications",
+        "High-value individuals"
+      ],
+      "prefers_stealth": true,
+      "willing_to_be_noisy": false,
+      "covers_tracks": true,
+      "uses_obfuscation": true,
+      "preferred_attack_times": [
+        "Strategic timing aligned with geopolitical events",
+        "Long-term campaigns (months to years)",
+        "Patient observation periods",
+        "Coordinated multi-stage operations"
+      ],
+      "average_attack_duration": "Months to years",
+      "typical_success_rate": 0.85,
+      "common_failure_reasons": [
+        "Rare detection by advanced threat hunting",
+        "Attribution leading to exposure",
+        "Whistleblower disclosure",
+        "Advanced security controls"
+      ]
+    },
+    "behavioral_indicators": {
+      "reconnaissance_style": "Extensive, multi-source intelligence gathering",
+      "exploitation_style": "Surgical precision, minimal footprint",
+      "post_exploitation_behavior": [
+        "Long-term persistence",
+        "Multiple redundant backdoors",
+        "Extensive lateral movement",
+        "Credential harvesting",
+        "Data staging and slow exfiltration",
+        "Sophisticated log manipulation",
+        "Living off the land techniques",
+        "Regular check-ins over months/years"
+      ],
+      "log_patterns": [
+        "Minimal logging footprint",
+        "Legitimate tool usage",
+        "Normal-looking traffic",
+        "Encrypted everything",
+        "Log manipulation/deletion",
+        "Mimics normal admin activity"
+      ],
+      "network_patterns": [
+        "Custom C2 protocols",
+        "Encrypted C2 over legitimate channels",
+        "Slow, low-volume exfiltration",
+        "Blends with normal traffic",
+        "Multiple layers of infrastructure",
+        "Compromised third-party servers",
+        "Domain fronting, DNS over HTTPS"
+      ],
+      "timing_patterns": [
+        "Extremely patient",
+        "Weeks/months between actions",
+        "Aligns with target's normal activity",
+        "No obvious patterns",
+        "Strategic geopolitical timing"
+      ],
+      "signature_behaviors": [
+        "Custom malware never seen before",
+        "Zero-day usage",
+        "Supply chain compromise",
+        "Watering hole attacks",
+        "Highly targeted spear phishing",
+        "No financial motivation",
+        "Specific intelligence targets",
+        "Advanced anti-forensics",
+        "Multiple redundant access methods"
+      ]
+    },
+    "decision_making": {
+      "when_to_proceed": [
+        "Strategic objective requires action",
+        "Opportunity for high-value intelligence",
+        "Geopolitical situation favorable",
+        "Target vulnerability confirmed",
+        "Low detection probability"
+      ],
+      "when_to_abort": [
+        "Compromise detected (burns infrastructure)",
+        "Mission objective achieved",
+        "Geopolitical situation changes",
+        "Risk of attribution too high"
+      ],
+      "when_to_retry": [
+        "Always (unlimited resources)",
+        "Different vector",
+        "New vulnerability discovered",
+        "Target still strategically important"
+      ],
+      "adapts_to_defenses": true,
+      "changes_tactics": true,
+      "learns_from_failures": true,
+      "risk_calculation": "SOPHISTICATED"
+    },
+    "typical_organizations": [
+      "Nation-state intelligence agencies",
+      "Military cyber units",
+      "State-sponsored hacking groups",
+      "APT groups (APT28, APT29, APT40, Lazarus, etc.)"
+    ],
+    "motivations": [
+      "Espionage",
+      "Intelligence gathering",
+      "Intellectual property theft",
+      "Geopolitical advantage",
+      "Critical infrastructure mapping",
+      "Pre-positioning for future conflict",
+      "Strategic sabotage capability"
+    ],
+    "end_goals": [
+      "Long-term intelligence access",
+      "Intellectual property theft",
+      "Strategic advantage",
+      "Critical infrastructure compromise",
+      "Political intelligence",
+      "Military secrets",
+      "Economic espionage",
+      "Sabotage preparation"
+    ],
+    "real_world_examples": [
+      "SolarWinds supply chain attack (APT29/Cozy Bear)",
+      "Stuxnet (industrial sabotage)",
+      "APT1 (China) - years-long espionage",
+      "Equation Group (NSA-linked)",
+      "Lazarus Group (North Korea) - Sony, WannaCry"
+    ],
+    "case_studies": [
+      "SolarWinds: 18,000 organizations compromised via supply chain",
+      "APT29: Months-long persistence in government networks",
+      "Stuxnet: Multi-year development for precise industrial sabotage"
+    ]
+  },
+  "PROFILE-004": {
+    "profile_id": "PROFILE-004",
+    "attacker_type": "Insider Threat",
+    "description": "Malicious or negligent employees with legitimate access",
+    "prevalence": "UNCOMMON",
+    "characteristics": {
+      "skill_level": "Intermediate",
+      "resource_level": "Moderate",
+      "persistence_level": "Moderate Persistence",
+      "custom_tool_development": false,
+      "zero_day_access": false,
+      "uses_automation": false,
+      "encryption_capability": false,
+      "operates_in_groups": false,
+      "profit_motivated": true,
+      "ideology_motivated": false,
+      "state_sponsored": false,
+      "risk_tolerance": "MEDIUM",
+      "patience": "MEDIUM",
+      "sophistication": "LOW"
+    },
+    "attack_patterns": {
+      "preferred_attack_types": [
+        "Data exfiltration",
+        "Intellectual property theft",
+        "Sabotage",
+        "Credential abuse",
+        "Privilege misuse",
+        "Data deletion"
+      ],
+      "common_tools": [
+        "Legitimate access credentials",
+        "USB drives",
+        "Cloud storage (Dropbox, Google Drive)",
+        "Email (personal accounts)",
+        "File sharing services",
+        "Mobile devices",
+        "Screen capture tools"
+      ],
+      "typical_targets": [
+        "Intellectual property",
+        "Customer databases",
+        "Financial records",
+        "Trade secrets",
+        "Employee data",
+        "Source code"
+      ],
+      "prefers_stealth": true,
+      "willing_to_be_noisy": false,
+      "covers_tracks": true,
+      "uses_obfuscation": false,
+      "preferred_attack_times": [
+        "During normal work hours (blends in)",
+        "Just before leaving company",
+        "Off-hours (if suspicious)",
+        "Before layoffs/termination"
+      ],
+      "average_attack_duration": "Days to months",
+      "typical_success_rate": 0.6,
+      "common_failure_reasons": [
+        "DLP (Data Loss Prevention) detection",
+        "Unusual access patterns flagged",
+        "Audit trail review",
+        "Coworker reports"
+      ]
+    },
+    "behavioral_indicators": {
+      "reconnaissance_style": "Uses existing knowledge of systems",
+      "exploitation_style": "Abuse of legitimate access",
+      "post_exploitation_behavior": [
+        "Data downloads",
+        "File copying",
+        "Email forwarding",
+        "Cloud uploads",
+        "USB transfers",
+        "Screen captures",
+        "Printing sensitive documents"
+      ],
+      "log_patterns": [
+        "Legitimate credentials used",
+        "Access to unusual resources",
+        "Large data downloads",
+        "After-hours access (if unusual)",
+        "Access to files outside normal duties",
+        "Failed access to restricted areas"
+      ],
+      "network_patterns": [
+        "Legitimate internal traffic",
+        "Large file uploads to personal cloud",
+        "USB device connections",
+        "Email to personal accounts",
+        "VPN access at odd times"
+      ],
+      "timing_patterns": [
+        "Often during business hours",
+        "Spike before resignation",
+        "After-hours if intentional theft",
+        "During periods of low supervision"
+      ],
+      "signature_behaviors": [
+        "Has authorized access (no break-in)",
+        "Knows what's valuable",
+        "Accesses data outside role",
+        "Unusual timing for access",
+        "Transfers to personal accounts/devices",
+        "Often correlated with job dissatisfaction",
+        "May delete data on exit"
+      ]
+    },
+    "decision_making": {
+      "when_to_proceed": [
+        "Job dissatisfaction",
+        "About to leave company",
+        "Financial pressure",
+        "Approached by competitor/foreign agent",
+        "Opportunity presents itself"
+      ],
+      "when_to_abort": [
+        "Increased monitoring noticed",
+        "Fear of consequences",
+        "Change of plans (staying at company)",
+        "Moral conflict"
+      ],
+      "when_to_retry": [
+        "If not caught immediately",
+        "At new job (using stolen data)",
+        "If consequences seem unlikely"
+      ],
+      "adapts_to_defenses": false,
+      "changes_tactics": false,
+      "learns_from_failures": false,
+      "risk_calculation": "BASIC"
+    },
+    "typical_organizations": [
+      "Disgruntled employees",
+      "Employees leaving for competitors",
+      "Financially motivated employees",
+      "Negligent employees (unintentional)",
+      "Recruited by competitors/nation-states"
+    ],
+    "motivations": [
+      "Financial gain",
+      "Revenge/grudge",
+      "Career advancement (taking IP to new job)",
+      "Recruitment by external parties",
+      "Negligence/carelessness"
+    ],
+    "end_goals": [
+      "Sell data to competitors",
+      "Take IP to new job",
+      "Sabotage company",
+      "Financial compensation from external parties",
+      "Personal use of data"
+    ],
+    "real_world_examples": [
+      "Employee steals customer list before joining competitor",
+      "Engineer downloads source code before departure",
+      "Finance employee commits fraud",
+      "Negligent employee loses laptop with data"
+    ],
+    "case_studies": [
+      "Tesla employee stole gigabytes of confidential data",
+      "GE engineer stole turbine technology for China",
+      "Waymo vs Uber: stolen self-driving car secrets"
+    ]
+  },
+  "PROFILE-005": {
+    "profile_id": "PROFILE-005",
+    "attacker_type": "Hacktivist",
+    "description": "Ideologically motivated attackers seeking to make political/social statements",
+    "prevalence": "UNCOMMON",
+    "characteristics": {
+      "skill_level": "Intermediate",
+      "resource_level": "Moderate",
+      "persistence_level": "Persistent",
+      "custom_tool_development": false,
+      "zero_day_access": false,
+      "uses_automation": true,
+      "encryption_capability": false,
+      "operates_in_groups": true,
+      "profit_motivated": false,
+      "ideology_motivated": true,
+      "state_sponsored": false,
+      "risk_tolerance": "HIGH",
+      "patience": "MEDIUM",
+      "sophistication": "MEDIUM"
+    },
+    "attack_patterns": {
+      "preferred_attack_types": [
+        "DDoS",
+        "Website defacement",
+        "Data leaks/doxing",
+        "Account takeovers",
+        "Defacement",
+        "Information warfare"
+      ],
+      "common_tools": [
+        "LOIC/HOIC (DDoS)",
+        "SQLmap",
+        "Web shells",
+        "Social media accounts",
+        "Leak platforms (WikiLeaks style)",
+        "Botnet access",
+        "Anonymous communication tools"
+      ],
+      "typical_targets": [
+        "Government websites",
+        "Corporate targets (perceived as unethical)",
+        "Political organizations",
+        "Law enforcement",
+        "Organizations opposed to their ideology",
+        "High-profile public figures"
+      ],
+      "prefers_stealth": false,
+      "willing_to_be_noisy": true,
+      "covers_tracks": true,
+      "uses_obfuscation": true,
+      "preferred_attack_times": [
+        "Coordinated campaigns around events",
+        "Political anniversaries",
+        "In response to news events",
+        "Publicized operation dates"
+      ],
+      "average_attack_duration": "Hours to days",
+      "typical_success_rate": 0.4,
+      "common_failure_reasons": [
+        "Law enforcement action",
+        "Poor operational security",
+        "Internal group conflicts",
+        "Target security too strong"
+      ]
+    },
+    "behavioral_indicators": {
+      "reconnaissance_style": "Public research, OSINT",
+      "exploitation_style": "Loud and public attacks",
+      "post_exploitation_behavior": [
+        "Public data leaks",
+        "Website defacement with messages",
+        "Social media announcements",
+        "Press releases",
+        "DDoS for disruption",
+        "Doxing individuals",
+        "Manifesto publication"
+      ],
+      "log_patterns": [
+        "Mass traffic (DDoS)",
+        "SQL injection attempts",
+        "Defacement indicators",
+        "Data exfiltration",
+        "Obvious attack patterns"
+      ],
+      "network_patterns": [
+        "DDoS traffic from botnets",
+        "Tor usage",
+        "VPN usage",
+        "Distributed sources",
+        "Coordinated timing"
+      ],
+      "timing_patterns": [
+        "Coordinated operations",
+        "Event-driven timing",
+        "Announced operations",
+        "Political calendar alignment"
+      ],
+      "signature_behaviors": [
+        "Public announcements of attacks",
+        "Political/ideological messaging",
+        "Defacement with manifesto",
+        "Data leaks for exposure",
+        "Social media presence",
+        "Coordination with news cycle",
+        "Claims responsibility",
+        "Seeks publicity"
+      ]
+    },
+    "decision_making": {
+      "when_to_proceed": [
+        "Target opposes ideology",
+        "Public event to leverage",
+        "Political momentum",
+        "Group consensus",
+        "Media attention available"
+      ],
+      "when_to_abort": [
+        "Law enforcement pressure",
+        "Public backlash",
+        "Internal disagreement",
+        "Risk too high"
+      ],
+      "when_to_retry": [
+        "Ideology still opposed",
+        "New opportunity arises",
+        "Group reformation",
+        "Renewed public interest"
+      ],
+      "adapts_to_defenses": true,
+      "changes_tactics": true,
+      "learns_from_failures": true,
+      "risk_calculation": "BASIC"
+    },
+    "typical_organizations": [
+      "Anonymous",
+      "LulzSec",
+      "Cyber Caliphate",
+      "Syrian Electronic Army",
+      "Loose collectives",
+      "Individual activists"
+    ],
+    "motivations": [
+      "Political ideology",
+      "Social justice",
+      "Anti-corporate sentiment",
+      "Freedom of information",
+      "Religious/cultural beliefs",
+      "Environmental activism",
+      "Anti-government sentiment"
+    ],
+    "end_goals": [
+      "Public awareness of issue",
+      "Embarrass target",
+      "Disrupt operations",
+      "Leak information",
+      "Political change",
+      "Damage reputation",
+      "Demonstrate vulnerability"
+    ],
+    "real_world_examples": [
+      "Anonymous - Operation Payback (against anti-piracy orgs)",
+      "LulzSec - Sony Pictures hack",
+      "Syrian Electronic Army - media outlet hacks",
+      "Anonymous - ISIS accounts takedown"
+    ],
+    "case_studies": [
+      "Operation Payback: Coordinated DDoS against anti-piracy groups",
+      "LulzSec: 50 days of chaos, multiple high-profile breaches",
+      "Anonymous vs ISIS: Taking down propaganda accounts"
+    ]
+  }
+}

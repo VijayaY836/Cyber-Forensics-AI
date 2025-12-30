@@ -1,0 +1,5 @@
+timestamp,ip_address,endpoint,request_parameters,has_sql_keywords,parameter_manipulation
+2025-03-01T14:33:01,103.21.44.19,/login,"username=admin' OR 1=1--&password=x",true,true
+2025-03-01T14:33:05,103.21.44.19,/search,"q=' UNION SELECT * FROM users--",true,true
+2025-03-01T14:33:09,103.21.44.19,/product,"id=1 OR 'a'='a'",true,true
+2025-03-01T14:33:13,103.21.44.19,/search,"q=%27%20UNION%20SELECT%20password%20FROM%20users",true,true

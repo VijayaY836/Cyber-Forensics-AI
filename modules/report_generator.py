@@ -23,7 +23,7 @@ class ForensicReportGenerator:
         }
     
     def generate_report(self, logs_df, anomaly_df=None, correlation_results=None, 
-                       timeline_results=None, log_stats=None):
+                       timeline_results=None, log_stats=None, prediction_results=None):
         """
         Generate comprehensive forensic report
         
@@ -33,6 +33,7 @@ class ForensicReportGenerator:
             correlation_results: Event correlation results
             timeline_results: Timeline analysis results
             log_stats: Log parsing statistics
+            prediction_results: Attack prediction results 
             
         Returns:
             str: Complete report in Markdown format
@@ -56,6 +57,10 @@ class ForensicReportGenerator:
         report.append(self._generate_technical_analysis(
             anomaly_df, correlation_results, timeline_results
         ))
+
+        # Attack Prediction Analysis
+        if prediction_results:
+            report.append(self._generate_prediction_section(prediction_results))
         
         # Attack Timeline
         if timeline_results:
@@ -282,13 +287,122 @@ class ForensicReportGenerator:
         
         return section
     
+    
+    def _generate_prediction_section(self, prediction_results):
+        """Generate attack prediction section"""
+        section = "## 🔮 ATTACK PREDICTION & THREAT INTELLIGENCE\n\n"
+    
+        # Identified attacks
+        if 'detected_attacks' in prediction_results and prediction_results['detected_attacks']:
+            section += "### 🎯 Identified Attack Types\n\n"
+        
+            for attack in prediction_results['detected_attacks']:
+                severity_icon = "🔴" if attack['severity'] == 'CRITICAL' else "🟠" if attack['severity'] == 'HIGH' else "🟡"
+                section += f"#### {severity_icon} {attack['attack_name']}\n\n"
+                section += f"- **Confidence:** {attack['confidence']:.0%}\n"
+                section += f"- **Severity:** {attack['severity']}\n"
+                section += f"- **Attack ID:** `{attack['attack_id']}`\n"
+                section += f"- **Detection Reason:** {attack['reason']}\n\n"
+    
+        # Next stage prediction
+        if 'next_stage_prediction' in prediction_results:
+            pred = prediction_results['next_stage_prediction']
+        
+            section += "### 📊 Next Stage Prediction\n\n"
+        
+            if pred.get('next_stage', {}).get('stage_name'):
+                section += f"**Predicted Next Stage:** {pred['next_stage']['stage_name']}\n"
+                section += f"**Probability:** {pred['next_stage']['probability']}\n"
+                section += f"**Severity if Reached:** {pred['next_stage']['severity']}\n\n"
+            
+                # Timing
+                if 'timing' in pred:
+                    timing = pred['timing']
+                    section += "**Estimated Timing:**\n\n"
+                    section += f"- Earliest: {timing['predicted_time_window']['earliest']}\n"
+                    section += f"- Most Likely: {timing['predicted_time_window']['most_likely']}\n"
+                    section += f"- Latest: {timing['predicted_time_window']['latest']}\n"
+                    section += f"- Detection Window Remaining: **{timing['detection_window_remaining']} minutes**\n\n"
+            
+                # Target prediction
+                if 'likely_targets' in pred:
+                    target = pred['likely_targets']
+                    if target.get('primary'):
+                        section += "**Likely Target:**\n\n"
+                        section += f"- Primary Target: **{target['primary']}**\n"
+                        section += f"- Probability: {target['probability']}\n"
+                        section += f"- Estimated Damage: {target['estimated_damage']}\n\n"
+    
+        # Point of no return
+        if 'point_of_no_return' in prediction_results:
+            ponr = prediction_results['point_of_no_return']
+        
+            section += "### ⚠️ Point of No Return Analysis\n\n"
+        
+            if ponr['can_still_stop']:
+                section += f"**Status:** {ponr['status']} - Attack can still be stopped\n"
+                section += f"**Time Remaining:** {ponr['minutes_remaining']} minutes until point of no return\n"
+                section += f"**Stages Remaining:** {ponr['stages_remaining']}\n"
+                section += f"**Critical Time:** {ponr['critical_time']}\n\n"
+            else:
+                section += "🚨 **CRITICAL WARNING:** Attack has reached or passed the point of no return.\n\n"
+                section += "Immediate containment and recovery actions are required.\n\n"
+    
+        # Attacker profile
+        if 'attacker_profile' in prediction_results:
+            profile = prediction_results['attacker_profile']
+        
+            section += "### 👤 Attacker Profile\n\n"
+        
+            if 'identified_attacker' in profile:
+                attacker = profile['identified_attacker']
+                section += f"**Identified Type:** {attacker['type']}\n"
+                section += f"**Confidence:** {attacker['confidence']}\n"
+                section += f"**Skill Level:** {attacker['skill_level']}\n"
+                section += f"**Sophistication:** {attacker['sophistication']}\n\n"
+        
+            if 'expected_behaviors' in profile:
+                behaviors = profile['expected_behaviors']
+                section += "**Expected Behaviors:**\n\n"
+                section += f"- Prefers Stealth: {behaviors['prefers_stealth']}\n"
+                section += f"- Covers Tracks: {behaviors['covers_tracks']}\n"
+                section += f"- Typical Duration: {behaviors['typical_duration']}\n"
+                section += f"- Success Rate: {behaviors['success_rate']}\n\n"
+        
+            if 'likely_next_actions' in profile:
+                section += "**Likely Next Actions:**\n\n"
+                for action in profile['likely_next_actions'][:5]:
+                    section += f"- {action}\n"
+                section += "\n"
+    
+        # Recommended actions from playbook
+        if 'recommended_actions' in prediction_results:
+            section += "### 🛡️ Playbook-Based Countermeasures\n\n"
+        
+            for i, action in enumerate(prediction_results['recommended_actions'], 1):
+                section += f"**{i}. {action['action']}**\n"
+                section += f"- Effectiveness: {action['effectiveness']}\n"
+                section += f"- Implementation Time: {action['time']}\n"
+                if 'countermeasure_id' in action and action['countermeasure_id']:
+                    section += f"- Countermeasure ID: `{action['countermeasure_id']}`\n"
+                section += "\n"
+    
+        return section
     def _generate_timeline_section(self, timeline_results):
         """Generate attack timeline section"""
         section = "## ⏱️ ATTACK TIMELINE\n\n"
-        
-        section += timeline_results.get('narrative', 'Timeline narrative not available.')
-        
+
+        if not timeline_results:
+            section += "Timeline narrative not available."
+            return section
+
+        section += timeline_results.get(
+            'narrative',
+            'Timeline narrative not available.'
+        )
+
         return section
+
     
     def _generate_evidence_summary(self, anomaly_df, correlation_results):
         """Generate evidence summary"""
@@ -521,7 +635,7 @@ be handled according to your organization's information security policies.
 
 # Helper function for easy import
 def generate_forensic_report(logs_df, anomaly_df=None, correlation_results=None, 
-                             timeline_results=None, log_stats=None):
+                             timeline_results=None, log_stats=None, prediction_results=None):
     """
     Convenience function to generate forensic report
     
@@ -531,13 +645,14 @@ def generate_forensic_report(logs_df, anomaly_df=None, correlation_results=None,
         correlation_results: Event correlation results
         timeline_results: Timeline analysis results
         log_stats: Log parsing statistics
+        prediction_results: Attack prediction results
         
     Returns:
         str: Complete forensic report in Markdown
     """
     generator = ForensicReportGenerator()
     report = generator.generate_report(
-        logs_df, anomaly_df, correlation_results, timeline_results, log_stats
+        logs_df, anomaly_df, correlation_results, timeline_results, log_stats, prediction_results
     )
     
     return report

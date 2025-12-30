@@ -1,0 +1,732 @@
+{
+  "TIMING-001": {
+    "set_id": "TIMING-001",
+    "attack_id": "ATK-AUTH-001",
+    "attack_name": "Brute Force Attack",
+    "attack_timeline": {
+      "timeline_id": "TIMELINE-001",
+      "attack_id": "ATK-AUTH-001",
+      "attack_name": "Brute Force Attack",
+      "stage_timings": [
+        {
+          "stage_id": "BF-STAGE-1",
+          "stage_number": 1,
+          "stage_name": "Reconnaissance",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 10,
+          "maximum_duration_minutes": 30,
+          "minimum_delay_to_next": 2,
+          "typical_delay_to_next": 5,
+          "maximum_delay_to_next": 15,
+          "preferred_time_of_day": [
+            "off_hours",
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend"
+          ],
+          "avoid_days": [],
+          "execution_speed": "fast",
+          "is_automated": true,
+          "automation_affects_timing": true,
+          "detection_window_minutes": 10
+        },
+        {
+          "stage_id": "BF-STAGE-2",
+          "stage_number": 2,
+          "stage_name": "Password Guessing",
+          "minimum_duration_minutes": 10,
+          "typical_duration_minutes": 30,
+          "maximum_duration_minutes": 120,
+          "minimum_delay_to_next": 1,
+          "typical_delay_to_next": 2,
+          "maximum_delay_to_next": 5,
+          "preferred_time_of_day": [
+            "off_hours",
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend",
+            "holiday"
+          ],
+          "avoid_days": [],
+          "execution_speed": "fast",
+          "is_automated": true,
+          "automation_affects_timing": true,
+          "detection_window_minutes": 30
+        },
+        {
+          "stage_id": "BF-STAGE-3",
+          "stage_number": 3,
+          "stage_name": "Successful Authentication",
+          "minimum_duration_minutes": 1,
+          "typical_duration_minutes": 2,
+          "maximum_duration_minutes": 5,
+          "minimum_delay_to_next": 2,
+          "typical_delay_to_next": 5,
+          "maximum_delay_to_next": 30,
+          "preferred_time_of_day": [
+            "off_hours"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend"
+          ],
+          "avoid_days": [],
+          "execution_speed": "lightning",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 5
+        },
+        {
+          "stage_id": "BF-STAGE-4",
+          "stage_number": 4,
+          "stage_name": "Privilege Escalation",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 15,
+          "maximum_duration_minutes": 60,
+          "minimum_delay_to_next": 3,
+          "typical_delay_to_next": 10,
+          "maximum_delay_to_next": 30,
+          "preferred_time_of_day": [
+            "off_hours",
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend"
+          ],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 15
+        },
+        {
+          "stage_id": "BF-STAGE-5",
+          "stage_number": 5,
+          "stage_name": "Actions on Objectives",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 20,
+          "maximum_duration_minutes": 120,
+          "minimum_delay_to_next": 0,
+          "typical_delay_to_next": 0,
+          "maximum_delay_to_next": 0,
+          "preferred_time_of_day": [
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend",
+            "holiday"
+          ],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 20
+        }
+      ],
+      "minimum_total_duration_minutes": 26,
+      "typical_total_duration_minutes": 82,
+      "maximum_total_duration_minutes": 342,
+      "attack_speed_category": "fast",
+      "critical_decision_points": [
+        {
+          "stage": 2,
+          "time_minutes": 15,
+          "action": "Enable account lockout or CAPTCHA",
+          "effectiveness": "95%"
+        },
+        {
+          "stage": 3,
+          "time_minutes": 45,
+          "action": "Force MFA on successful login after failures",
+          "effectiveness": "99%"
+        },
+        {
+          "stage": 4,
+          "time_minutes": 60,
+          "action": "Block IP and reset credentials",
+          "effectiveness": "90%"
+        }
+      ],
+      "point_of_no_return_stage": 4,
+      "point_of_no_return_time_minutes": 60,
+      "preferred_start_times": [
+        "22:00-02:00",
+        "Saturday evenings",
+        "Holidays"
+      ],
+      "peak_activity_periods": [
+        "Stage 2 (Password Guessing) - sustained high activity",
+        "Off-hours for stealth"
+      ],
+      "typical_dwell_time_minutes": null
+    },
+    "temporal_indicators": [
+      {
+        "indicator_name": "automated_consistent_timing",
+        "description": "Exactly consistent intervals between attempts",
+        "time_pattern": "consistent_intervals",
+        "frequency": "high",
+        "events_per_minute": [
+          10,
+          60
+        ],
+        "consistent_interval_seconds": 2,
+        "off_hours_multiplier": 1.5,
+        "weekend_multiplier": 1.3,
+        "holiday_multiplier": 1.4,
+        "severity_if_detected": "HIGH"
+      },
+      {
+        "indicator_name": "rapid_burst",
+        "description": "Sudden spike of authentication attempts",
+        "time_pattern": "burst",
+        "frequency": "high",
+        "events_per_minute": [
+          20,
+          100
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 1.8,
+        "weekend_multiplier": 1.5,
+        "holiday_multiplier": 1.6,
+        "severity_if_detected": "CRITICAL"
+      },
+      {
+        "indicator_name": "sustained_pressure",
+        "description": "Continuous authentication attempts over extended period",
+        "time_pattern": "sustained",
+        "frequency": "medium",
+        "events_per_minute": [
+          5,
+          20
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 1.4,
+        "weekend_multiplier": 1.3,
+        "holiday_multiplier": 1.3,
+        "severity_if_detected": "HIGH"
+      }
+    ],
+    "speed_profiles": [
+      {
+        "attacker_type": "Script Kiddie",
+        "speed_category": "fast",
+        "reconnaissance_multiplier": 0.5,
+        "exploitation_multiplier": 1.0,
+        "post_exploitation_multiplier": 0.3,
+        "typical_attack_duration_minutes": 30,
+        "gives_up_after_minutes": 15,
+        "retry_attempts": 2
+      },
+      {
+        "attacker_type": "Cybercriminal",
+        "speed_category": "medium",
+        "reconnaissance_multiplier": 1.0,
+        "exploitation_multiplier": 1.5,
+        "post_exploitation_multiplier": 1.0,
+        "typical_attack_duration_minutes": 90,
+        "gives_up_after_minutes": 60,
+        "retry_attempts": 5
+      },
+      {
+        "attacker_type": "APT",
+        "speed_category": "slow",
+        "reconnaissance_multiplier": 3.0,
+        "exploitation_multiplier": 2.0,
+        "post_exploitation_multiplier": 5.0,
+        "typical_attack_duration_minutes": 1440,
+        "gives_up_after_minutes": null,
+        "retry_attempts": 100
+      }
+    ]
+  },
+  "TIMING-002": {
+    "set_id": "TIMING-002",
+    "attack_id": "ATK-INJ-001",
+    "attack_name": "SQL Injection Attack",
+    "attack_timeline": {
+      "timeline_id": "TIMELINE-002",
+      "attack_id": "ATK-INJ-001",
+      "attack_name": "SQL Injection Attack",
+      "stage_timings": [
+        {
+          "stage_id": "SQL-STAGE-1",
+          "stage_number": 1,
+          "stage_name": "Vulnerability Discovery",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 15,
+          "maximum_duration_minutes": 60,
+          "minimum_delay_to_next": 2,
+          "typical_delay_to_next": 5,
+          "maximum_delay_to_next": 20,
+          "preferred_time_of_day": [
+            "off_hours"
+          ],
+          "avoid_time_of_day": [],
+          "preferred_days": [],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": true,
+          "automation_affects_timing": true,
+          "detection_window_minutes": 15
+        },
+        {
+          "stage_id": "SQL-STAGE-2",
+          "stage_number": 2,
+          "stage_name": "Exploitation",
+          "minimum_duration_minutes": 10,
+          "typical_duration_minutes": 30,
+          "maximum_duration_minutes": 180,
+          "minimum_delay_to_next": 2,
+          "typical_delay_to_next": 10,
+          "maximum_delay_to_next": 60,
+          "preferred_time_of_day": [
+            "off_hours",
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend"
+          ],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 30
+        },
+        {
+          "stage_id": "SQL-STAGE-3",
+          "stage_number": 3,
+          "stage_name": "Data Extraction",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 20,
+          "maximum_duration_minutes": 120,
+          "minimum_delay_to_next": 5,
+          "typical_delay_to_next": 15,
+          "maximum_delay_to_next": 60,
+          "preferred_time_of_day": [
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend",
+            "holiday"
+          ],
+          "avoid_days": [],
+          "execution_speed": "fast",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 20
+        },
+        {
+          "stage_id": "SQL-STAGE-4",
+          "stage_number": 4,
+          "stage_name": "Persistence & Backdoor",
+          "minimum_duration_minutes": 5,
+          "typical_duration_minutes": 15,
+          "maximum_duration_minutes": 60,
+          "minimum_delay_to_next": 0,
+          "typical_delay_to_next": 0,
+          "maximum_delay_to_next": 0,
+          "preferred_time_of_day": [
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend",
+            "holiday"
+          ],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 15
+        }
+      ],
+      "minimum_total_duration_minutes": 27,
+      "typical_total_duration_minutes": 95,
+      "maximum_total_duration_minutes": 480,
+      "attack_speed_category": "medium",
+      "critical_decision_points": [
+        {
+          "stage": 1,
+          "time_minutes": 15,
+          "action": "Deploy WAF rules to block SQL injection patterns",
+          "effectiveness": "85%"
+        },
+        {
+          "stage": 2,
+          "time_minutes": 45,
+          "action": "Block IP and patch vulnerability",
+          "effectiveness": "95%"
+        },
+        {
+          "stage": 3,
+          "time_minutes": 65,
+          "action": "Isolate database and reset credentials",
+          "effectiveness": "80%"
+        }
+      ],
+      "point_of_no_return_stage": 3,
+      "point_of_no_return_time_minutes": 65,
+      "preferred_start_times": [
+        "20:00-06:00",
+        "Weekends",
+        "Holidays"
+      ],
+      "peak_activity_periods": [
+        "Stage 2 (Exploitation) - methodical testing",
+        "Stage 3 (Data Extraction) - bulk queries"
+      ],
+      "typical_dwell_time_minutes": null
+    },
+    "temporal_indicators": [
+      {
+        "indicator_name": "rapid_error_generation",
+        "description": "Quick succession of database error responses",
+        "time_pattern": "burst",
+        "frequency": "high",
+        "events_per_minute": [
+          5,
+          30
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 1.5,
+        "weekend_multiplier": 1.3,
+        "holiday_multiplier": 1.4,
+        "severity_if_detected": "HIGH"
+      },
+      {
+        "indicator_name": "methodical_enumeration",
+        "description": "Slow, systematic testing pattern",
+        "time_pattern": "sustained",
+        "frequency": "low",
+        "events_per_minute": [
+          0.5,
+          2
+        ],
+        "consistent_interval_seconds": 30,
+        "off_hours_multiplier": 1.3,
+        "weekend_multiplier": 1.2,
+        "holiday_multiplier": 1.3,
+        "severity_if_detected": "MEDIUM"
+      },
+      {
+        "indicator_name": "bulk_data_extraction",
+        "description": "Sustained large query activity",
+        "time_pattern": "sustained",
+        "frequency": "medium",
+        "events_per_minute": [
+          1,
+          5
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 2.0,
+        "weekend_multiplier": 1.8,
+        "holiday_multiplier": 1.9,
+        "severity_if_detected": "CRITICAL"
+      }
+    ],
+    "speed_profiles": [
+      {
+        "attacker_type": "Script Kiddie",
+        "speed_category": "fast",
+        "reconnaissance_multiplier": 0.5,
+        "exploitation_multiplier": 0.8,
+        "post_exploitation_multiplier": 0.3,
+        "typical_attack_duration_minutes": 45,
+        "gives_up_after_minutes": 30,
+        "retry_attempts": 3
+      },
+      {
+        "attacker_type": "Cybercriminal",
+        "speed_category": "medium",
+        "reconnaissance_multiplier": 1.0,
+        "exploitation_multiplier": 1.5,
+        "post_exploitation_multiplier": 1.0,
+        "typical_attack_duration_minutes": 120,
+        "gives_up_after_minutes": 90,
+        "retry_attempts": 10
+      },
+      {
+        "attacker_type": "APT",
+        "speed_category": "slow",
+        "reconnaissance_multiplier": 3.0,
+        "exploitation_multiplier": 2.5,
+        "post_exploitation_multiplier": 4.0,
+        "typical_attack_duration_minutes": 2880,
+        "gives_up_after_minutes": null,
+        "retry_attempts": 100
+      }
+    ]
+  },
+  "TIMING-003": {
+    "set_id": "TIMING-003",
+    "attack_id": "ATK-MAL-001",
+    "attack_name": "Ransomware Attack",
+    "attack_timeline": {
+      "timeline_id": "TIMELINE-003",
+      "attack_id": "ATK-MAL-001",
+      "attack_name": "Ransomware Attack",
+      "stage_timings": [
+        {
+          "stage_id": "RANSOMWARE-STAGE-1",
+          "stage_number": 1,
+          "stage_name": "Initial Compromise",
+          "minimum_duration_minutes": 1,
+          "typical_duration_minutes": 5,
+          "maximum_duration_minutes": 30,
+          "minimum_delay_to_next": 1,
+          "typical_delay_to_next": 3,
+          "maximum_delay_to_next": 10,
+          "preferred_time_of_day": [
+            "business_hours"
+          ],
+          "avoid_time_of_day": [],
+          "preferred_days": [
+            "weekday"
+          ],
+          "avoid_days": [
+            "weekend"
+          ],
+          "execution_speed": "lightning",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 5
+        },
+        {
+          "stage_id": "RANSOMWARE-STAGE-2",
+          "stage_number": 2,
+          "stage_name": "Malware Execution & Persistence",
+          "minimum_duration_minutes": 2,
+          "typical_duration_minutes": 10,
+          "maximum_duration_minutes": 30,
+          "minimum_delay_to_next": 10,
+          "typical_delay_to_next": 60,
+          "maximum_delay_to_next": 360,
+          "preferred_time_of_day": [],
+          "avoid_time_of_day": [],
+          "preferred_days": [],
+          "avoid_days": [],
+          "execution_speed": "fast",
+          "is_automated": true,
+          "automation_affects_timing": true,
+          "detection_window_minutes": 10
+        },
+        {
+          "stage_id": "RANSOMWARE-STAGE-3",
+          "stage_number": 3,
+          "stage_name": "Network Reconnaissance",
+          "minimum_duration_minutes": 15,
+          "typical_duration_minutes": 60,
+          "maximum_duration_minutes": 480,
+          "minimum_delay_to_next": 30,
+          "typical_delay_to_next": 300,
+          "maximum_delay_to_next": 2880,
+          "preferred_time_of_day": [
+            "off_hours"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [],
+          "avoid_days": [],
+          "execution_speed": "medium",
+          "is_automated": true,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 60
+        },
+        {
+          "stage_id": "RANSOMWARE-STAGE-4",
+          "stage_number": 4,
+          "stage_name": "Lateral Movement",
+          "minimum_duration_minutes": 60,
+          "typical_duration_minutes": 300,
+          "maximum_duration_minutes": 2880,
+          "minimum_delay_to_next": 120,
+          "typical_delay_to_next": 600,
+          "maximum_delay_to_next": 4320,
+          "preferred_time_of_day": [
+            "off_hours",
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [],
+          "avoid_days": [],
+          "execution_speed": "slow",
+          "is_automated": false,
+          "automation_affects_timing": false,
+          "detection_window_minutes": 300
+        },
+        {
+          "stage_id": "RANSOMWARE-STAGE-5",
+          "stage_number": 5,
+          "stage_name": "Mass Encryption",
+          "minimum_duration_minutes": 30,
+          "typical_duration_minutes": 240,
+          "maximum_duration_minutes": 1440,
+          "minimum_delay_to_next": 0,
+          "typical_delay_to_next": 0,
+          "maximum_delay_to_next": 0,
+          "preferred_time_of_day": [
+            "late_night"
+          ],
+          "avoid_time_of_day": [
+            "business_hours"
+          ],
+          "preferred_days": [
+            "weekend",
+            "holiday"
+          ],
+          "avoid_days": [],
+          "execution_speed": "fast",
+          "is_automated": true,
+          "automation_affects_timing": true,
+          "detection_window_minutes": 60
+        }
+      ],
+      "minimum_total_duration_minutes": 108,
+      "typical_total_duration_minutes": 1275,
+      "maximum_total_duration_minutes": 9000,
+      "attack_speed_category": "medium",
+      "critical_decision_points": [
+        {
+          "stage": 2,
+          "time_minutes": 15,
+          "action": "Isolate infected system immediately",
+          "effectiveness": "95%"
+        },
+        {
+          "stage": 3,
+          "time_minutes": 75,
+          "action": "Segment network and disable lateral movement",
+          "effectiveness": "85%"
+        },
+        {
+          "stage": 4,
+          "time_minutes": 375,
+          "action": "Disconnect from network, restore from offline backups",
+          "effectiveness": "70%"
+        },
+        {
+          "stage": 5,
+          "time_minutes": 975,
+          "action": "Emergency shutdown of all systems",
+          "effectiveness": "30%"
+        }
+      ],
+      "point_of_no_return_stage": 5,
+      "point_of_no_return_time_minutes": 975,
+      "preferred_start_times": [
+        "Phishing during business hours (Stage 1)",
+        "Encryption Friday evening (Stage 5) - delays response over weekend",
+        "Holidays for maximum impact"
+      ],
+      "peak_activity_periods": [
+        "Stage 4 (Lateral Movement) - hours of network activity",
+        "Stage 5 (Encryption) - intense CPU/disk activity"
+      ],
+      "typical_dwell_time_minutes": 720
+    },
+    "temporal_indicators": [
+      {
+        "indicator_name": "delayed_execution",
+        "description": "Long delay between infection and encryption (dwell time)",
+        "time_pattern": "sporadic",
+        "frequency": "low",
+        "events_per_minute": null,
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 1.0,
+        "weekend_multiplier": 1.0,
+        "holiday_multiplier": 1.0,
+        "severity_if_detected": "HIGH"
+      },
+      {
+        "indicator_name": "friday_evening_encryption",
+        "description": "Encryption starts Friday evening (weekend delay tactic)",
+        "time_pattern": "burst",
+        "frequency": "high",
+        "events_per_minute": [
+          50,
+          200
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 1.0,
+        "weekend_multiplier": 2.5,
+        "holiday_multiplier": 3.0,
+        "severity_if_detected": "CRITICAL"
+      },
+      {
+        "indicator_name": "off_hours_lateral_movement",
+        "description": "Network scanning and propagation during off-hours",
+        "time_pattern": "sustained",
+        "frequency": "medium",
+        "events_per_minute": [
+          5,
+          20
+        ],
+        "consistent_interval_seconds": null,
+        "off_hours_multiplier": 2.0,
+        "weekend_multiplier": 1.5,
+        "holiday_multiplier": 1.8,
+        "severity_if_detected": "HIGH"
+      }
+    ],
+    "speed_profiles": [
+      {
+        "attacker_type": "Opportunistic Ransomware",
+        "speed_category": "fast",
+        "reconnaissance_multiplier": 0.3,
+        "exploitation_multiplier": 0.5,
+        "post_exploitation_multiplier": 1.0,
+        "typical_attack_duration_minutes": 120,
+        "gives_up_after_minutes": null,
+        "retry_attempts": 0
+      },
+      {
+        "attacker_type": "Ransomware Gang (RaaS)",
+        "speed_category": "medium",
+        "reconnaissance_multiplier": 1.0,
+        "exploitation_multiplier": 1.0,
+        "post_exploitation_multiplier": 2.0,
+        "typical_attack_duration_minutes": 1440,
+        "gives_up_after_minutes": null,
+        "retry_attempts": 10
+      },
+      {
+        "attacker_type": "Targeted Ransomware (APT-style)",
+        "speed_category": "slow",
+        "reconnaissance_multiplier": 5.0,
+        "exploitation_multiplier": 3.0,
+        "post_exploitation_multiplier": 10.0,
+        "typical_attack_duration_minutes": 10080,
+        "gives_up_after_minutes": null,
+        "retry_attempts": 100
+      }
+    ]
+  }
+}

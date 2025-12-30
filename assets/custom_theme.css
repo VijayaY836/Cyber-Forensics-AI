@@ -7,13 +7,13 @@ body, .stApp {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #00ff41 !important;
+    color: #ffffffff !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px;
 }
 
 .stButton > button, .stDownloadButton > button {
-    background: linear-gradient(90deg, #00ff41 0%, #232946 100%) !important;
+    background: linear-gradient(90deg, #ffffffff 0%, #232946 100%) !important;
     color: #232946 !important;
     border: none !important;
     border-radius: 8px !important;
@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .stButton > button:hover, .stDownloadButton > button:hover {
     background: linear-gradient(90deg, #232946 0%, #00ff41 100%) !important;
-    color: #00ff41 !important;
+    color: #ffffffff !important;
     transform: translateY(-2px) scale(1.03);
 }
 
@@ -120,3 +120,151 @@ h1, h2, h3, h4, h5, h6 {
 /* Hide Streamlit default hamburger and footer */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+
+/* ========================================
+   OPACITY FIXES FOR BETTER VISIBILITY
+   ======================================== */
+
+/* Attack Prediction Section - Main containers */
+div[data-testid="column"] > div {
+    background: rgba(24, 28, 42, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+    padding: 18px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0, 255, 65, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    margin-bottom: 12px !important;
+}
+
+/* Metric containers - more opaque */
+.stMetric, 
+div[data-testid="metric-container"] {
+    background: rgba(24, 28, 42, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(0, 255, 65, 0.2) !important;
+    box-shadow: 0 3px 10px rgba(0, 255, 65, 0.1) !important;
+}
+
+/* Info/Warning/Success/Error boxes - enhanced visibility */
+.stAlert, 
+.stInfo, 
+.stWarning, 
+.stError, 
+.stSuccess,
+div[data-testid="stAlert"],
+div[data-testid="stNotification"] {
+    background: rgba(24, 28, 42, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    border-left: 4px solid #ffffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Markdown containers in prediction sections */
+div[data-testid="stMarkdownContainer"] > div {
+    background: rgba(24, 28, 42, 0.88) !important;
+    backdrop-filter: blur(8px) !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(127, 219, 255, 0.1) !important;
+}
+
+/* Expander content - better background */
+.streamlit-expanderContent {
+    background: rgba(24, 28, 42, 0.92) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(0, 255, 65, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+}
+
+/* Timing prediction boxes */
+div[data-testid="column"]:has(.stInfo),
+div[data-testid="column"]:has(.stWarning),
+div[data-testid="column"]:has(.stError) {
+    background: rgba(35, 41, 70, 0.93) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(0, 255, 65, 0.25) !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Horizontal dividers - more visible */
+hr {
+    border-color: rgba(0, 255, 65, 0.3) !important;
+    margin: 25px 0 !important;
+}
+
+/* Text emphasis for better readability */
+strong, b {
+    color: #00ff41 !important;
+    font-weight: 700 !important;
+}
+
+/* Lists in prediction sections */
+ul, ol {
+    background: rgba(35, 41, 70, 0.5) !important;
+    padding: 15px 15px 15px 35px !important;
+    border-radius: 8px !important;
+    border-left: 3px solid rgba(0, 255, 65, 0.4) !important;
+}
+
+/* Table headers - more contrast */
+thead tr th {
+    background: rgba(0, 255, 65, 0.15) !important;
+    color: #00ff41 !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid #00ff41 !important;
+}
+
+/* Table rows - alternating with better visibility */
+tbody tr:nth-child(odd) {
+    background: rgba(24, 28, 42, 0.85) !important;
+}
+
+tbody tr:nth-child(even) {
+    background: rgba(35, 41, 70, 0.75) !important;
+}
+
+/* Hover effects for interactive elements */
+div[data-testid="column"]:hover {
+    border-color: rgba(0, 255, 65, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(0, 255, 65, 0.15) !important;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Loading spinners - more visible */
+.stSpinner > div {
+    border-color: #00ff41 !important;
+    border-top-color: transparent !important;
+}
+
+/* Progress bars */
+.stProgress > div > div {
+    background: #00ff41 !important;
+}
+
+/* File uploader - better visibility */
+.stFileUploader {
+    background: rgba(24, 28, 42, 0.9) !important;
+    border: 2px dashed rgba(0, 255, 65, 0.4) !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+}
+
+/* Radio buttons and checkboxes */
+.stRadio, .stCheckbox {
+    background: rgba(24, 28, 42, 0.7) !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+}
+
+/* Select boxes and inputs */
+.stSelectbox, .stTextInput, .stNumberInput {
+    background: rgba(24, 28, 42, 0.9) !important;
+    border-radius: 8px !important;
+}
+/* ========================================
+   END OPACITY FIXES
+   ======================================== */
+
+

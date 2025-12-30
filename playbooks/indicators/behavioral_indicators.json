@@ -1,0 +1,795 @@
+{
+  "IND-001": {
+    "indicator_set_id": "IND-001",
+    "attack_id": "ATK-AUTH-001",
+    "attack_name": "Brute Force Attack",
+    "quantitative_indicators": [
+      {
+        "metric_name": "failed_login_count",
+        "description": "Number of failed login attempts",
+        "low_threshold": 10,
+        "medium_threshold": 25,
+        "high_threshold": 50,
+        "critical_threshold": 100,
+        "time_window_minutes": 5,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "authentication_events"
+        ],
+        "filter_conditions": {
+          "result": "FAILED"
+        }
+      },
+      {
+        "metric_name": "failed_login_rate",
+        "description": "Rate of failed attempts (attempts per minute)",
+        "low_threshold": 2.0,
+        "medium_threshold": 5.0,
+        "high_threshold": 10.0,
+        "critical_threshold": 20.0,
+        "time_window_minutes": 1,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "authentication_events"
+        ],
+        "filter_conditions": {
+          "result": "FAILED"
+        }
+      },
+      {
+        "metric_name": "unique_passwords_attempted",
+        "description": "Number of different passwords tried",
+        "low_threshold": 5,
+        "medium_threshold": 15,
+        "high_threshold": 30,
+        "critical_threshold": 50,
+        "time_window_minutes": 10,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "authentication_events"
+        ],
+        "filter_conditions": {
+          "result": "FAILED"
+        }
+      },
+      {
+        "metric_name": "success_after_failures",
+        "description": "Successful login after many failures",
+        "low_threshold": 10,
+        "medium_threshold": 25,
+        "high_threshold": 50,
+        "critical_threshold": 100,
+        "time_window_minutes": 30,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "authentication_events"
+        ],
+        "filter_conditions": {
+          "preceding_failures": true
+        }
+      }
+    ],
+    "qualitative_indicators": [
+      {
+        "pattern_name": "sequential_usernames",
+        "description": "Testing usernames in alphabetical/sequential order",
+        "log_field": "user",
+        "pattern_type": "sequential",
+        "pattern_value": "admin, admin1, admin2, administrator",
+        "base_severity": "MEDIUM",
+        "must_occur_with": [
+          "multiple_failed_attempts"
+        ],
+        "increases_severity_if": [
+          "automated_timing"
+        ],
+        "example_matches": [
+          "admin",
+          "admin1",
+          "admin2"
+        ],
+        "example_non_matches": [
+          "john.doe",
+          "alice.smith"
+        ]
+      },
+      {
+        "pattern_name": "common_passwords",
+        "description": "Attempts using common/default passwords",
+        "log_field": "password_pattern",
+        "pattern_type": "contains",
+        "pattern_value": "password, 123456, admin, default",
+        "base_severity": "MEDIUM",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "high_attempt_rate"
+        ],
+        "example_matches": [
+          "password123",
+          "admin",
+          "123456"
+        ],
+        "example_non_matches": [
+          "x9$mK!pQ2@vL"
+        ]
+      },
+      {
+        "pattern_name": "single_source_ip",
+        "description": "All attempts from single IP address",
+        "log_field": "ip_address",
+        "pattern_type": "equals",
+        "pattern_value": "same_ip",
+        "base_severity": "HIGH",
+        "must_occur_with": [
+          "multiple_failed_attempts"
+        ],
+        "increases_severity_if": [
+          "high_attempt_rate"
+        ],
+        "example_matches": [
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10",
+          "45.67.89.10"
+        ],
+        "example_non_matches": [
+          "192.168.1.1",
+          "192.168.1.2",
+          "192.168.1.3"
+        ]
+      },
+      {
+        "pattern_name": "tor_or_vpn_usage",
+        "description": "Attempts from known anonymization services",
+        "log_field": "ip_address",
+        "pattern_type": "matches_list",
+        "pattern_value": "tor_exit_nodes, vpn_providers",
+        "base_severity": "HIGH",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "multiple_failed_attempts"
+        ],
+        "example_matches": [
+          "185.220.101.1",
+          "45.142.120.1"
+        ],
+        "example_non_matches": [
+          "8.8.8.8",
+          "192.168.1.1"
+        ]
+      }
+    ],
+    "temporal_indicators": [
+      {
+        "pattern_name": "off_hours_activity",
+        "description": "Login attempts during unusual hours",
+        "time_of_day": [
+          22,
+          6
+        ],
+        "day_of_week": null,
+        "frequency": "high_frequency",
+        "events_per_minute": [
+          5,
+          20
+        ],
+        "consistent_interval": null,
+        "base_severity": "MEDIUM",
+        "severity_multiplier_off_hours": 1.5,
+        "severity_multiplier_weekend": 1.3
+      },
+      {
+        "pattern_name": "automated_timing",
+        "description": "Consistent intervals suggesting automated tool",
+        "time_of_day": null,
+        "day_of_week": null,
+        "frequency": "sustained",
+        "events_per_minute": null,
+        "consistent_interval": 2,
+        "base_severity": "HIGH",
+        "severity_multiplier_off_hours": 1.0,
+        "severity_multiplier_weekend": 1.0
+      },
+      {
+        "pattern_name": "burst_activity",
+        "description": "Sudden spike in authentication attempts",
+        "time_of_day": null,
+        "day_of_week": null,
+        "frequency": "burst",
+        "events_per_minute": [
+          10,
+          100
+        ],
+        "consistent_interval": null,
+        "base_severity": "HIGH",
+        "severity_multiplier_off_hours": 1.2,
+        "severity_multiplier_weekend": 1.2
+      }
+    ],
+    "contextual_indicators": [
+      {
+        "indicator_name": "admin_account_targeted",
+        "description": "Attempts against privileged accounts",
+        "user_type": [
+          "admin",
+          "root",
+          "administrator"
+        ],
+        "resource_sensitivity": "critical",
+        "location_anomaly": true,
+        "device_anomaly": true,
+        "normal_behavior_baseline": {
+          "typical_login_times": [
+            8,
+            17
+          ],
+          "typical_locations": [
+            "office"
+          ],
+          "typical_devices": [
+            "known_workstation"
+          ]
+        },
+        "deviation_threshold": 0.7,
+        "base_severity": "CRITICAL"
+      },
+      {
+        "indicator_name": "geographic_anomaly",
+        "description": "Login from unusual geographic location",
+        "user_type": null,
+        "resource_sensitivity": null,
+        "location_anomaly": true,
+        "device_anomaly": false,
+        "normal_behavior_baseline": {
+          "typical_countries": [
+            "US"
+          ],
+          "impossible_travel": false
+        },
+        "deviation_threshold": 0.8,
+        "base_severity": "MEDIUM"
+      },
+      {
+        "indicator_name": "new_device_login",
+        "description": "Login from previously unseen device/user agent",
+        "user_type": null,
+        "resource_sensitivity": null,
+        "location_anomaly": false,
+        "device_anomaly": true,
+        "normal_behavior_baseline": {
+          "known_devices": [],
+          "device_change_frequency": "low"
+        },
+        "deviation_threshold": 0.6,
+        "base_severity": "LOW"
+      }
+    ],
+    "minimum_indicators_for_detection": 2,
+    "confidence_weights": {
+      "quantitative": 0.35,
+      "qualitative": 0.25,
+      "temporal": 0.2,
+      "contextual": 0.2
+    }
+  },
+  "IND-002": {
+    "indicator_set_id": "IND-002",
+    "attack_id": "ATK-INJ-001",
+    "attack_name": "SQL Injection Attack",
+    "quantitative_indicators": [
+      {
+        "metric_name": "sql_keyword_count",
+        "description": "Number of SQL keywords in parameters",
+        "low_threshold": 3,
+        "medium_threshold": 10,
+        "high_threshold": 25,
+        "critical_threshold": 50,
+        "time_window_minutes": 5,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "web_requests"
+        ],
+        "filter_conditions": {
+          "has_sql_keywords": true
+        }
+      },
+      {
+        "metric_name": "database_error_rate",
+        "description": "Frequency of database error responses",
+        "low_threshold": 5,
+        "medium_threshold": 15,
+        "high_threshold": 30,
+        "critical_threshold": 50,
+        "time_window_minutes": 10,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "web_responses"
+        ],
+        "filter_conditions": {
+          "status_code": 500,
+          "error_type": "database"
+        }
+      },
+      {
+        "metric_name": "query_execution_time",
+        "description": "Unusually long database query times",
+        "low_threshold": 1.0,
+        "medium_threshold": 5.0,
+        "high_threshold": 10.0,
+        "critical_threshold": 30.0,
+        "time_window_minutes": 1,
+        "comparison_operator": ">",
+        "aggregation_method": "max",
+        "applies_to": [
+          "database_queries"
+        ],
+        "filter_conditions": {}
+      },
+      {
+        "metric_name": "large_result_sets",
+        "description": "Queries returning unusually large result sets",
+        "low_threshold": 1000,
+        "medium_threshold": 5000,
+        "high_threshold": 10000,
+        "critical_threshold": 50000,
+        "time_window_minutes": 5,
+        "comparison_operator": ">",
+        "aggregation_method": "max",
+        "applies_to": [
+          "database_queries"
+        ],
+        "filter_conditions": {
+          "rows_returned": true
+        }
+      }
+    ],
+    "qualitative_indicators": [
+      {
+        "pattern_name": "union_select",
+        "description": "UNION SELECT statements in parameters",
+        "log_field": "request_parameters",
+        "pattern_type": "regex",
+        "pattern_value": "UNION\\s+(ALL\\s+)?SELECT",
+        "base_severity": "CRITICAL",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "information_schema_access"
+        ],
+        "example_matches": [
+          "' UNION SELECT * FROM users--"
+        ],
+        "example_non_matches": [
+          "normal search query"
+        ]
+      },
+      {
+        "pattern_name": "sql_comments",
+        "description": "SQL comment sequences to bypass filters",
+        "log_field": "request_parameters",
+        "pattern_type": "contains",
+        "pattern_value": "--,/*,*/,#",
+        "base_severity": "HIGH",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "sql_keywords"
+        ],
+        "example_matches": [
+          "admin'--",
+          "test'/*"
+        ],
+        "example_non_matches": [
+          "normal-url-with-dash"
+        ]
+      },
+      {
+        "pattern_name": "information_schema_access",
+        "description": "Attempts to query database metadata",
+        "log_field": "query_text",
+        "pattern_type": "contains",
+        "pattern_value": "information_schema",
+        "base_severity": "CRITICAL",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "union_select"
+        ],
+        "example_matches": [
+          "SELECT * FROM information_schema.tables"
+        ],
+        "example_non_matches": [
+          "SELECT * FROM products"
+        ]
+      },
+      {
+        "pattern_name": "tautology",
+        "description": "Always-true conditions (1=1, 'a'='a')",
+        "log_field": "request_parameters",
+        "pattern_type": "regex",
+        "pattern_value": "(1=1|'1'='1'|'a'='a'|OR\\s+1=1)",
+        "base_severity": "HIGH",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "database_errors"
+        ],
+        "example_matches": [
+          "' OR '1'='1",
+          "admin' OR 1=1--"
+        ],
+        "example_non_matches": [
+          "normal=value"
+        ]
+      },
+      {
+        "pattern_name": "encoded_payload",
+        "description": "Base64 or hex encoded SQL injection attempts",
+        "log_field": "request_parameters",
+        "pattern_type": "regex",
+        "pattern_value": "(%[0-9A-F]{2}|base64|0x[0-9A-F]+)",
+        "base_severity": "HIGH",
+        "must_occur_with": [
+          "sql_keywords"
+        ],
+        "increases_severity_if": [
+          "multiple_encoding_layers"
+        ],
+        "example_matches": [
+          "%27%20UNION%20SELECT",
+          "0x53454c454354"
+        ],
+        "example_non_matches": [
+          "normal text"
+        ]
+      }
+    ],
+    "temporal_indicators": [
+      {
+        "pattern_name": "rapid_injection_attempts",
+        "description": "Multiple injection attempts in quick succession",
+        "time_of_day": null,
+        "day_of_week": null,
+        "frequency": "high_frequency",
+        "events_per_minute": [
+          5,
+          30
+        ],
+        "consistent_interval": null,
+        "base_severity": "HIGH",
+        "severity_multiplier_off_hours": 1.3,
+        "severity_multiplier_weekend": 1.2
+      },
+      {
+        "pattern_name": "systematic_enumeration",
+        "description": "Methodical testing suggesting manual analysis",
+        "time_of_day": null,
+        "day_of_week": null,
+        "frequency": "sustained",
+        "events_per_minute": [
+          0.5,
+          2
+        ],
+        "consistent_interval": 30,
+        "base_severity": "MEDIUM",
+        "severity_multiplier_off_hours": 1.0,
+        "severity_multiplier_weekend": 1.0
+      }
+    ],
+    "contextual_indicators": [
+      {
+        "indicator_name": "sensitive_table_access",
+        "description": "Queries targeting high-value data tables",
+        "user_type": null,
+        "resource_sensitivity": "critical",
+        "location_anomaly": false,
+        "device_anomaly": false,
+        "normal_behavior_baseline": {
+          "typical_tables": [
+            "products",
+            "categories"
+          ],
+          "sensitive_tables": [
+            "users",
+            "payments",
+            "credentials"
+          ]
+        },
+        "deviation_threshold": 0.9,
+        "base_severity": "CRITICAL"
+      },
+      {
+        "indicator_name": "unauthenticated_injection",
+        "description": "SQL injection from unauthenticated user",
+        "user_type": [
+          "anonymous",
+          "guest"
+        ],
+        "resource_sensitivity": null,
+        "location_anomaly": false,
+        "device_anomaly": false,
+        "normal_behavior_baseline": {},
+        "deviation_threshold": 0.5,
+        "base_severity": "HIGH"
+      }
+    ],
+    "minimum_indicators_for_detection": 2,
+    "confidence_weights": {
+      "quantitative": 0.3,
+      "qualitative": 0.4,
+      "temporal": 0.15,
+      "contextual": 0.15
+    }
+  },
+  "IND-003": {
+    "indicator_set_id": "IND-003",
+    "attack_id": "ATK-MAL-001",
+    "attack_name": "Ransomware Attack",
+    "quantitative_indicators": [
+      {
+        "metric_name": "file_modification_rate",
+        "description": "Rapid mass file modifications",
+        "low_threshold": 100,
+        "medium_threshold": 500,
+        "high_threshold": 1000,
+        "critical_threshold": 5000,
+        "time_window_minutes": 5,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "file_operations"
+        ],
+        "filter_conditions": {
+          "operation": "modify"
+        }
+      },
+      {
+        "metric_name": "file_extension_changes",
+        "description": "Files being renamed with new extensions",
+        "low_threshold": 50,
+        "medium_threshold": 200,
+        "high_threshold": 500,
+        "critical_threshold": 1000,
+        "time_window_minutes": 10,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "file_operations"
+        ],
+        "filter_conditions": {
+          "extension_changed": true
+        }
+      },
+      {
+        "metric_name": "shadow_copy_deletions",
+        "description": "Volume shadow copy deletion commands",
+        "low_threshold": 1,
+        "medium_threshold": 3,
+        "high_threshold": 5,
+        "critical_threshold": 10,
+        "time_window_minutes": 30,
+        "comparison_operator": ">",
+        "aggregation_method": "count",
+        "applies_to": [
+          "system_commands"
+        ],
+        "filter_conditions": {
+          "command": "vssadmin delete"
+        }
+      },
+      {
+        "metric_name": "cpu_disk_spike",
+        "description": "Sustained high CPU and disk usage",
+        "low_threshold": 70,
+        "medium_threshold": 80,
+        "high_threshold": 90,
+        "critical_threshold": 95,
+        "time_window_minutes": 15,
+        "comparison_operator": ">",
+        "aggregation_method": "avg",
+        "applies_to": [
+          "system_resources"
+        ],
+        "filter_conditions": {
+          "metric": "cpu_and_disk"
+        }
+      }
+    ],
+    "qualitative_indicators": [
+      {
+        "pattern_name": "ransom_note_creation",
+        "description": "Creation of ransom note files",
+        "log_field": "filename",
+        "pattern_type": "regex",
+        "pattern_value": "(README|DECRYPT|RANSOM|HOW_TO_DECRYPT|RESTORE_FILES)\\.(txt|html)",
+        "base_severity": "CRITICAL",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "mass_encryption"
+        ],
+        "example_matches": [
+          "README.txt",
+          "HOW_TO_DECRYPT.html"
+        ],
+        "example_non_matches": [
+          "readme.md",
+          "document.txt"
+        ]
+      },
+      {
+        "pattern_name": "encrypted_extension",
+        "description": "Files with ransomware-specific extensions",
+        "log_field": "filename",
+        "pattern_type": "regex",
+        "pattern_value": "\\.(encrypted|locked|crypto|crypt|cerber|locky|wannacry)$",
+        "base_severity": "CRITICAL",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "mass_file_changes"
+        ],
+        "example_matches": [
+          "file.docx.encrypted",
+          "photo.jpg.locked"
+        ],
+        "example_non_matches": [
+          "document.docx",
+          "image.jpg"
+        ]
+      },
+      {
+        "pattern_name": "security_tool_termination",
+        "description": "Attempts to disable antivirus or security tools",
+        "log_field": "process_command",
+        "pattern_type": "contains",
+        "pattern_value": "taskkill, Stop-Service, sc stop, net stop",
+        "base_severity": "HIGH",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "file_encryption"
+        ],
+        "example_matches": [
+          "taskkill /IM MsMpEng.exe",
+          "sc stop WinDefend"
+        ],
+        "example_non_matches": [
+          "normal service restart"
+        ]
+      },
+      {
+        "pattern_name": "lateral_movement_tools",
+        "description": "Use of lateral movement utilities",
+        "log_field": "process_name",
+        "pattern_type": "contains",
+        "pattern_value": "psexec, wmic, powershell, mimikatz",
+        "base_severity": "HIGH",
+        "must_occur_with": [],
+        "increases_severity_if": [
+          "multiple_host_infection"
+        ],
+        "example_matches": [
+          "psexec.exe",
+          "mimikatz.exe"
+        ],
+        "example_non_matches": [
+          "explorer.exe",
+          "chrome.exe"
+        ]
+      }
+    ],
+    "temporal_indicators": [
+      {
+        "pattern_name": "encryption_timing",
+        "description": "Mass encryption during off-hours",
+        "time_of_day": [
+          18,
+          6
+        ],
+        "day_of_week": [
+          "Saturday",
+          "Sunday"
+        ],
+        "frequency": "burst",
+        "events_per_minute": null,
+        "consistent_interval": null,
+        "base_severity": "CRITICAL",
+        "severity_multiplier_off_hours": 1.5,
+        "severity_multiplier_weekend": 1.8
+      },
+      {
+        "pattern_name": "dwell_time",
+        "description": "Delay between initial infection and encryption",
+        "time_of_day": null,
+        "day_of_week": null,
+        "frequency": "sustained",
+        "events_per_minute": null,
+        "consistent_interval": null,
+        "base_severity": "HIGH",
+        "severity_multiplier_off_hours": 1.0,
+        "severity_multiplier_weekend": 1.0
+      }
+    ],
+    "contextual_indicators": [
+      {
+        "indicator_name": "network_share_encryption",
+        "description": "Encryption spreading to network shares",
+        "user_type": null,
+        "resource_sensitivity": "critical",
+        "location_anomaly": false,
+        "device_anomaly": false,
+        "normal_behavior_baseline": {
+          "typical_network_activity": "low"
+        },
+        "deviation_threshold": 0.9,
+        "base_severity": "CRITICAL"
+      },
+      {
+        "indicator_name": "backup_system_targeted",
+        "description": "Ransomware targeting backup systems",
+        "user_type": null,
+        "resource_sensitivity": "critical",
+        "location_anomaly": false,
+        "device_anomaly": false,
+        "normal_behavior_baseline": {
+          "backup_access_frequency": "scheduled"
+        },
+        "deviation_threshold": 0.95,
+        "base_severity": "CRITICAL"
+      }
+    ],
+    "minimum_indicators_for_detection": 3,
+    "confidence_weights": {
+      "quantitative": 0.4,
+      "qualitative": 0.35,
+      "temporal": 0.15,
+      "contextual": 0.1
+    }
+  }
+}

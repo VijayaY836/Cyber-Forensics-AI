@@ -1,0 +1,873 @@
+{
+  "MOTTARG-001": {
+    "set_id": "MOTTARG-001",
+    "attack_id": "ATK-AUTH-001",
+    "attack_name": "Brute Force Attack",
+    "motivation_profile": {
+      "motivation_id": "MOT-001",
+      "attack_id": "ATK-AUTH-001",
+      "attack_name": "Brute Force Attack",
+      "primary_motivations": [
+        {
+          "motivation": "Financial Gain",
+          "percentage": 70
+        },
+        {
+          "motivation": "Espionage",
+          "percentage": 15
+        },
+        {
+          "motivation": "Sabotage/Destruction",
+          "percentage": 10
+        },
+        {
+          "motivation": "Testing/Research",
+          "percentage": 5
+        }
+      ],
+      "end_goals": [
+        "Gain unauthorized access to user accounts",
+        "Steal sensitive data (credentials, personal info, financial data)",
+        "Install malware or backdoors",
+        "Pivot to other systems (lateral movement)",
+        "Steal intellectual property",
+        "Compromise email accounts for phishing",
+        "Take over social media accounts",
+        "Access financial accounts"
+      ],
+      "monetization_methods": [
+        "Sell stolen credentials on dark web ($1-$50 per account)",
+        "Sell access to compromised systems ($100-$10,000)",
+        "Use accounts for fraud/theft",
+        "Ransom stolen data back to victim",
+        "Use email access for business email compromise (BEC)",
+        "Sell personal data to data brokers",
+        "Use for identity theft",
+        "Deploy ransomware after gaining access"
+      ],
+      "typical_attackers": [
+        "Script kiddies (opportunistic)",
+        "Organized cybercriminal groups",
+        "State-sponsored actors (for espionage)",
+        "Competitors (industrial espionage)",
+        "Disgruntled insiders"
+      ]
+    },
+    "target_priorities": [
+      {
+        "target_name": "Admin/Root Accounts",
+        "asset_type": "account",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Full system control",
+          "Can disable security measures",
+          "Access to all data",
+          "Can create backdoors",
+          "Difficult to detect malicious actions"
+        ],
+        "typical_contents": [
+          "System configuration",
+          "All user data",
+          "Security settings",
+          "Database credentials",
+          "Encryption keys"
+        ],
+        "estimated_breach_cost": 500000,
+        "dark_web_value": 1000,
+        "attractiveness_factors": [
+          "Highest privilege level",
+          "Single point of total compromise",
+          "Can disable logging/monitoring",
+          "Often has weak passwords",
+          "High resale value"
+        ],
+        "targeting_probability": 0.95
+      },
+      {
+        "target_name": "Database Admin Accounts",
+        "asset_type": "account",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Direct database access",
+          "Can extract all data",
+          "Can modify/delete records",
+          "Bypass application-level security",
+          "Access to backups"
+        ],
+        "typical_contents": [
+          "Customer data",
+          "Payment information",
+          "Personal identifiable information (PII)",
+          "Business intelligence",
+          "Trade secrets"
+        ],
+        "estimated_breach_cost": 2000000,
+        "dark_web_value": 500,
+        "attractiveness_factors": [
+          "Direct data access",
+          "No application layer restrictions",
+          "Can export bulk data",
+          "High-value data",
+          "Often overlooked in monitoring"
+        ],
+        "targeting_probability": 0.9
+      },
+      {
+        "target_name": "Email Accounts (Executive/Admin)",
+        "asset_type": "account",
+        "value_classification": "HIGH",
+        "value_reasons": [
+          "Business email compromise (BEC)",
+          "Access to sensitive communications",
+          "Can authorize fraudulent transactions",
+          "Password reset for other accounts",
+          "Contacts for phishing"
+        ],
+        "typical_contents": [
+          "Confidential emails",
+          "Financial information",
+          "Contract details",
+          "Strategic plans",
+          "Employee/customer data"
+        ],
+        "estimated_breach_cost": 150000,
+        "dark_web_value": 100,
+        "attractiveness_factors": [
+          "High trust from recipients",
+          "Can initiate wire transfers",
+          "Access to business relationships",
+          "Source of intelligence",
+          "Useful for social engineering"
+        ],
+        "targeting_probability": 0.85
+      },
+      {
+        "target_name": "Financial/Payment Accounts",
+        "asset_type": "account",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Direct financial theft",
+          "Credit card information",
+          "Bank account details",
+          "Payment processor access",
+          "Immediate monetization"
+        ],
+        "typical_contents": [
+          "Credit card numbers",
+          "Bank account information",
+          "Transaction history",
+          "Customer payment data",
+          "Billing information"
+        ],
+        "estimated_breach_cost": 3000000,
+        "dark_web_value": 50,
+        "attractiveness_factors": [
+          "Immediate cash value",
+          "Easy to monetize",
+          "High demand on dark web",
+          "Can be used for fraud",
+          "Difficult to trace"
+        ],
+        "targeting_probability": 0.92
+      },
+      {
+        "target_name": "Service/API Accounts",
+        "asset_type": "account",
+        "value_classification": "HIGH",
+        "value_reasons": [
+          "Automated access to systems",
+          "Often has elevated privileges",
+          "Rarely monitored",
+          "No MFA usually",
+          "Long-lived credentials"
+        ],
+        "typical_contents": [
+          "API keys",
+          "Database connections",
+          "Third-party service access",
+          "Cloud resource control",
+          "Automated processes"
+        ],
+        "estimated_breach_cost": 400000,
+        "dark_web_value": 200,
+        "attractiveness_factors": [
+          "Weak authentication (no MFA)",
+          "High privileges",
+          "Less monitoring",
+          "Long-term access",
+          "Gateway to other systems"
+        ],
+        "targeting_probability": 0.75
+      },
+      {
+        "target_name": "Regular User Accounts",
+        "asset_type": "account",
+        "value_classification": "MEDIUM",
+        "value_reasons": [
+          "Volume play (compromise many)",
+          "Stepping stone to privilege escalation",
+          "Personal data theft",
+          "Credential stuffing target",
+          "Social engineering source"
+        ],
+        "typical_contents": [
+          "Personal information",
+          "Work files",
+          "Email access",
+          "Application data",
+          "Low-level system access"
+        ],
+        "estimated_breach_cost": 5000,
+        "dark_web_value": 5,
+        "attractiveness_factors": [
+          "Easier to compromise (weaker passwords)",
+          "Large number of targets",
+          "Users less security-aware",
+          "Useful for phishing",
+          "Can escalate privileges"
+        ],
+        "targeting_probability": 0.6
+      }
+    ],
+    "asset_characteristics": [
+      {
+        "characteristic_name": "Weak Password Policy",
+        "description": "System allows simple passwords, no complexity requirements",
+        "increases_risk_by": 3.0,
+        "example_assets": [
+          "Legacy systems",
+          "Old applications",
+          "IoT devices",
+          "Default accounts"
+        ]
+      },
+      {
+        "characteristic_name": "No Account Lockout",
+        "description": "Unlimited login attempts allowed",
+        "increases_risk_by": 5.0,
+        "example_assets": [
+          "APIs without rate limiting",
+          "Misconfigured applications",
+          "Custom authentication systems",
+          "Legacy infrastructure"
+        ]
+      },
+      {
+        "characteristic_name": "No MFA/2FA",
+        "description": "Only password required for authentication",
+        "increases_risk_by": 10.0,
+        "example_assets": [
+          "Many internal systems",
+          "Legacy applications",
+          "Small business systems",
+          "Consumer accounts"
+        ]
+      },
+      {
+        "characteristic_name": "Publicly Accessible",
+        "description": "Authentication endpoint accessible from internet",
+        "increases_risk_by": 2.0,
+        "example_assets": [
+          "Web applications",
+          "VPN gateways",
+          "Remote desktop services",
+          "Email servers"
+        ]
+      },
+      {
+        "characteristic_name": "High-Value Data",
+        "description": "Contains sensitive, valuable, or regulated data",
+        "increases_risk_by": 4.0,
+        "example_assets": [
+          "Customer databases",
+          "Financial systems",
+          "Healthcare records",
+          "Intellectual property repositories"
+        ]
+      }
+    ],
+    "primary_target_prediction": "Admin/Root Accounts",
+    "secondary_targets": [
+      "Database Admin Accounts",
+      "Financial/Payment Accounts",
+      "Email Accounts (Executive/Admin)"
+    ],
+    "target_selection_factors": {
+      "privilege_level": 0.35,
+      "data_value": 0.3,
+      "accessibility": 0.2,
+      "detection_risk": 0.15
+    }
+  },
+  "MOTTARG-002": {
+    "set_id": "MOTTARG-002",
+    "attack_id": "ATK-INJ-001",
+    "attack_name": "SQL Injection Attack",
+    "motivation_profile": {
+      "motivation_id": "MOT-002",
+      "attack_id": "ATK-INJ-001",
+      "attack_name": "SQL Injection Attack",
+      "primary_motivations": [
+        {
+          "motivation": "Financial Gain",
+          "percentage": 75
+        },
+        {
+          "motivation": "Espionage",
+          "percentage": 15
+        },
+        {
+          "motivation": "Hacktivism",
+          "percentage": 5
+        },
+        {
+          "motivation": "Testing/Research",
+          "percentage": 5
+        }
+      ],
+      "end_goals": [
+        "Extract sensitive data from database",
+        "Steal customer information (PII)",
+        "Steal payment card data",
+        "Steal login credentials",
+        "Modify database records",
+        "Delete/corrupt data (sabotage)",
+        "Bypass authentication",
+        "Gain administrative access",
+        "Install backdoor via database",
+        "Execute system commands"
+      ],
+      "monetization_methods": [
+        "Sell stolen data on dark web ($10-$500 per record depending on type)",
+        "Ransom stolen data back to victim",
+        "Use stolen credentials for account takeover",
+        "Sell database dumps to competitors",
+        "Credit card fraud",
+        "Identity theft",
+        "Blackmail with exposed sensitive data",
+        "Use backdoor access for ransomware deployment"
+      ],
+      "typical_attackers": [
+        "Organized cybercriminal groups",
+        "Data brokers",
+        "Competitors (industrial espionage)",
+        "Nation-state actors",
+        "Hacktivists (for data leaks)"
+      ]
+    },
+    "target_priorities": [
+      {
+        "target_name": "Customer Database",
+        "asset_type": "database",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Large volume of PII",
+          "Email addresses for phishing",
+          "Names, addresses, phone numbers",
+          "Purchase history",
+          "High resale value"
+        ],
+        "typical_contents": [
+          "Full names",
+          "Email addresses",
+          "Physical addresses",
+          "Phone numbers",
+          "Date of birth",
+          "Account information"
+        ],
+        "estimated_breach_cost": 5000000,
+        "dark_web_value": 10,
+        "attractiveness_factors": [
+          "High record count",
+          "Complete profiles",
+          "Multiple use cases",
+          "Easy to monetize",
+          "Compliance penalties for breach"
+        ],
+        "targeting_probability": 0.95
+      },
+      {
+        "target_name": "Payment/Credit Card Database",
+        "asset_type": "database",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Immediate financial value",
+          "Credit card numbers",
+          "CVV codes",
+          "Billing addresses",
+          "Highest dark web prices"
+        ],
+        "typical_contents": [
+          "Credit card numbers",
+          "Expiration dates",
+          "CVV/CVC codes",
+          "Cardholder names",
+          "Billing addresses",
+          "Transaction history"
+        ],
+        "estimated_breach_cost": 10000000,
+        "dark_web_value": 50,
+        "attractiveness_factors": [
+          "Direct financial value",
+          "Immediate monetization",
+          "High demand",
+          "Fresh cards most valuable",
+          "Can be used for fraud"
+        ],
+        "targeting_probability": 0.98
+      },
+      {
+        "target_name": "User Credentials Table",
+        "asset_type": "database",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Login credentials for all users",
+          "Email/password combinations",
+          "Useful for credential stuffing",
+          "Account takeover potential",
+          "Access to user accounts"
+        ],
+        "typical_contents": [
+          "Usernames",
+          "Email addresses",
+          "Password hashes (or plaintext if poorly secured)",
+          "Security questions",
+          "Account status",
+          "User roles/permissions"
+        ],
+        "estimated_breach_cost": 3000000,
+        "dark_web_value": 5,
+        "attractiveness_factors": [
+          "Enables account takeover",
+          "Credential stuffing attacks",
+          "Many users reuse passwords",
+          "Gateway to other systems",
+          "Can escalate privileges"
+        ],
+        "targeting_probability": 0.92
+      },
+      {
+        "target_name": "Financial Records/Transactions",
+        "asset_type": "database",
+        "value_classification": "HIGH",
+        "value_reasons": [
+          "Revenue data",
+          "Transaction details",
+          "Bank account information",
+          "Financial intelligence",
+          "Competitive intelligence"
+        ],
+        "typical_contents": [
+          "Transaction amounts",
+          "Payment methods",
+          "Account balances",
+          "Revenue reports",
+          "Financial projections"
+        ],
+        "estimated_breach_cost": 2000000,
+        "dark_web_value": 100,
+        "attractiveness_factors": [
+          "Business intelligence value",
+          "Competitive advantage",
+          "Fraud potential",
+          "Blackmail material",
+          "Market manipulation"
+        ],
+        "targeting_probability": 0.8
+      },
+      {
+        "target_name": "Healthcare/Medical Records",
+        "asset_type": "database",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Protected Health Information (PHI)",
+          "Complete identity profiles",
+          "Insurance information",
+          "Medical history",
+          "Highest value on dark web"
+        ],
+        "typical_contents": [
+          "Patient names",
+          "Social Security numbers",
+          "Medical diagnoses",
+          "Prescriptions",
+          "Insurance details",
+          "Treatment history"
+        ],
+        "estimated_breach_cost": 7000000,
+        "dark_web_value": 250,
+        "attractiveness_factors": [
+          "Most expensive on dark web",
+          "Complete identity data",
+          "Insurance fraud potential",
+          "HIPAA penalties",
+          "Long-term value"
+        ],
+        "targeting_probability": 0.88
+      },
+      {
+        "target_name": "Employee/HR Database",
+        "asset_type": "database",
+        "value_classification": "HIGH",
+        "value_reasons": [
+          "Complete employee records",
+          "SSNs and tax information",
+          "Salary data",
+          "Background checks",
+          "Internal intelligence"
+        ],
+        "typical_contents": [
+          "Employee names",
+          "Social Security numbers",
+          "Addresses",
+          "Salary information",
+          "Performance reviews",
+          "Employment history"
+        ],
+        "estimated_breach_cost": 1500000,
+        "dark_web_value": 30,
+        "attractiveness_factors": [
+          "Identity theft potential",
+          "Tax fraud",
+          "Social engineering info",
+          "Insider recruitment",
+          "Competitive intelligence"
+        ],
+        "targeting_probability": 0.7
+      },
+      {
+        "target_name": "Intellectual Property Database",
+        "asset_type": "database",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Trade secrets",
+          "Research data",
+          "Product designs",
+          "Source code",
+          "Competitive advantage"
+        ],
+        "typical_contents": [
+          "Patents",
+          "Research findings",
+          "Product specifications",
+          "Manufacturing processes",
+          "Business strategies",
+          "Source code"
+        ],
+        "estimated_breach_cost": 20000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "Unique, irreplaceable",
+          "Competitive intelligence",
+          "Nation-state interest",
+          "Long-term value",
+          "Hard to detect theft"
+        ],
+        "targeting_probability": 0.65
+      }
+    ],
+    "asset_characteristics": [
+      {
+        "characteristic_name": "No Input Validation",
+        "description": "Application doesn't sanitize user input",
+        "increases_risk_by": 10.0,
+        "example_assets": [
+          "Legacy web applications",
+          "Custom-built systems",
+          "Poorly coded forms",
+          "Search functions"
+        ]
+      },
+      {
+        "characteristic_name": "Verbose Error Messages",
+        "description": "Database errors exposed to users",
+        "increases_risk_by": 3.0,
+        "example_assets": [
+          "Development/staging sites",
+          "Poorly configured applications",
+          "Debug mode enabled in production"
+        ]
+      },
+      {
+        "characteristic_name": "Direct Database Access",
+        "description": "Application directly constructs SQL queries",
+        "increases_risk_by": 8.0,
+        "example_assets": [
+          "Applications without ORM",
+          "Legacy code",
+          "Custom database layers"
+        ]
+      },
+      {
+        "characteristic_name": "Privileged Database User",
+        "description": "Application uses high-privilege database account",
+        "increases_risk_by": 5.0,
+        "example_assets": [
+          "Admin-level database connections",
+          "Root database access",
+          "SA/DBA accounts"
+        ]
+      }
+    ],
+    "primary_target_prediction": "Payment/Credit Card Database",
+    "secondary_targets": [
+      "Customer Database",
+      "User Credentials Table",
+      "Healthcare/Medical Records"
+    ],
+    "target_selection_factors": {
+      "data_value": 0.4,
+      "record_count": 0.25,
+      "accessibility": 0.2,
+      "monetization_ease": 0.15
+    }
+  },
+  "MOTTARG-003": {
+    "set_id": "MOTTARG-003",
+    "attack_id": "ATK-MAL-001",
+    "attack_name": "Ransomware Attack",
+    "motivation_profile": {
+      "motivation_id": "MOT-003",
+      "attack_id": "ATK-MAL-001",
+      "attack_name": "Ransomware Attack",
+      "primary_motivations": [
+        {
+          "motivation": "Ransomware/Extortion",
+          "percentage": 90
+        },
+        {
+          "motivation": "Sabotage/Destruction",
+          "percentage": 8
+        },
+        {
+          "motivation": "Testing/Research",
+          "percentage": 2
+        }
+      ],
+      "end_goals": [
+        "Encrypt critical business data",
+        "Demand ransom payment",
+        "Exfiltrate data for double extortion",
+        "Disrupt business operations",
+        "Cause financial/reputational damage",
+        "Destroy backups to force payment",
+        "Maximize ransom amount"
+      ],
+      "monetization_methods": [
+        "Direct ransom payments ($50K - $50M+ in cryptocurrency)",
+        "Double extortion (payment + no data leak threat)",
+        "Triple extortion (DDoS + encryption + leak threat)",
+        "Sell stolen data if ransom not paid",
+        "Ransomware-as-a-Service (RaaS) revenue sharing"
+      ],
+      "typical_attackers": [
+        "Organized ransomware gangs (REvil, Conti, LockBit)",
+        "RaaS affiliates",
+        "Nation-state actors (destructive attacks)",
+        "Financially motivated criminals"
+      ]
+    },
+    "target_priorities": [
+      {
+        "target_name": "Backup Systems",
+        "asset_type": "system",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Eliminates recovery option",
+          "Forces ransom payment",
+          "Maximizes impact",
+          "Increases leverage",
+          "No alternative to paying"
+        ],
+        "typical_contents": [
+          "System backups",
+          "Database backups",
+          "File backups",
+          "Snapshot copies",
+          "Disaster recovery data"
+        ],
+        "estimated_breach_cost": 15000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "Eliminates recovery",
+          "Increases ransom amount",
+          "Shows sophistication",
+          "Maximizes victim desperation",
+          "Often poorly protected"
+        ],
+        "targeting_probability": 0.99
+      },
+      {
+        "target_name": "File Servers",
+        "asset_type": "system",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "High volume of business files",
+          "Shared network resources",
+          "Critical to operations",
+          "Wide impact",
+          "Difficult to recreate"
+        ],
+        "typical_contents": [
+          "Business documents",
+          "Contracts",
+          "Financial records",
+          "Project files",
+          "Employee documents"
+        ],
+        "estimated_breach_cost": 8000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "High file count",
+          "Business-critical",
+          "Shared across organization",
+          "Cannot function without",
+          "Ransomware spreads via shares"
+        ],
+        "targeting_probability": 0.95
+      },
+      {
+        "target_name": "Database Servers",
+        "asset_type": "system",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Mission-critical data",
+          "Cannot operate without",
+          "Contains all business data",
+          "Double extortion potential",
+          "High ransom amounts"
+        ],
+        "typical_contents": [
+          "Customer data",
+          "Transaction records",
+          "Financial data",
+          "Operational data",
+          "Historical records"
+        ],
+        "estimated_breach_cost": 20000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "Most valuable data",
+          "Business-critical",
+          "Can steal + encrypt",
+          "Double extortion",
+          "Justifies highest ransom"
+        ],
+        "targeting_probability": 0.92
+      },
+      {
+        "target_name": "Domain Controllers",
+        "asset_type": "system",
+        "value_classification": "CRITICAL",
+        "value_reasons": [
+          "Controls entire network",
+          "Can propagate to all systems",
+          "Authentication system",
+          "Maximum impact",
+          "Single point of failure"
+        ],
+        "typical_contents": [
+          "Active Directory database",
+          "User accounts",
+          "Group policies",
+          "Authentication services",
+          "Network configuration"
+        ],
+        "estimated_breach_cost": 25000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "Control entire network",
+          "Propagate to all systems",
+          "Maximum disruption",
+          "Cannot recover easily",
+          "Highest ransom leverage"
+        ],
+        "targeting_probability": 0.88
+      },
+      {
+        "target_name": "Production Systems",
+        "asset_type": "system",
+        "value_classification": "HIGH",
+        "value_reasons": [
+          "Stops business operations",
+          "Revenue loss per hour",
+          "Customer impact",
+          "SLA breaches",
+          "Reputation damage"
+        ],
+        "typical_contents": [
+          "Web servers",
+          "Application servers",
+          "E-commerce platforms",
+          "Manufacturing control systems",
+          "Customer-facing systems"
+        ],
+        "estimated_breach_cost": 12000000,
+        "dark_web_value": null,
+        "attractiveness_factors": [
+          "Immediate revenue loss",
+          "Customer impact",
+          "Public visibility",
+          "Pressure to pay quickly",
+          "Reputation damage"
+        ],
+        "targeting_probability": 0.85
+      }
+    ],
+    "asset_characteristics": [
+      {
+        "characteristic_name": "No Offline Backups",
+        "description": "All backups are online and accessible",
+        "increases_risk_by": 10.0,
+        "example_assets": [
+          "Network-attached backup systems",
+          "Cloud-only backups",
+          "Continuous replication"
+        ]
+      },
+      {
+        "characteristic_name": "Network-Accessible Systems",
+        "description": "Systems accessible via SMB/RDP across network",
+        "increases_risk_by": 5.0,
+        "example_assets": [
+          "File shares",
+          "Remote desktop services",
+          "Network storage"
+        ]
+      },
+      {
+        "characteristic_name": "High Business Value",
+        "description": "Critical to business operations, cannot function without",
+        "increases_risk_by": 8.0,
+        "example_assets": [
+          "ERP systems",
+          "Core business applications",
+          "Production databases",
+          "Customer-facing systems"
+        ]
+      },
+      {
+        "characteristic_name": "Poor Segmentation",
+        "description": "Flat network, no isolation between systems",
+        "increases_risk_by": 6.0,
+        "example_assets": [
+          "Small business networks",
+          "Legacy infrastructure",
+          "Poorly designed networks"
+        ]
+      }
+    ],
+    "primary_target_prediction": "Backup Systems",
+    "secondary_targets": [
+      "Domain Controllers",
+      "Database Servers",
+      "File Servers"
+    ],
+    "target_selection_factors": {
+      "business_impact": 0.4,
+      "eliminates_recovery": 0.35,
+      "ransom_leverage": 0.15,
+      "accessibility": 0.1
+    }
+  }
+}

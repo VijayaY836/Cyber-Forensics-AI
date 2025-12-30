@@ -1,0 +1,1275 @@
+{
+  "CMSET-001": {
+    "set_id": "CMSET-001",
+    "attack_id": "ATK-AUTH-001",
+    "attack_name": "Brute Force Attack",
+    "countermeasures": [
+      {
+        "countermeasure_id": "CM-BF-001",
+        "name": "Account Lockout Policy",
+        "description": "Lock account after N failed login attempts",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.85,
+        "false_positive_rate": 0.1,
+        "effective_against_stages": [
+          1,
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-002"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Access to authentication system",
+          "Admin privileges"
+        ],
+        "user_impact": "MEDIUM",
+        "business_impact": "LOW",
+        "potential_side_effects": [
+          "Legitimate users may get locked out",
+          "Help desk ticket volume increases",
+          "User frustration"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Switch to different accounts",
+          "Slow down attack rate",
+          "Use distributed IPs"
+        ],
+        "detection_bypass_rate": 0.4
+      },
+      {
+        "countermeasure_id": "CM-BF-002",
+        "name": "Rate Limiting",
+        "description": "Limit login attempts per time period",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.9,
+        "false_positive_rate": 0.05,
+        "effective_against_stages": [
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-002",
+          "ATK-AUTH-003"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "Web application firewall or load balancer",
+          "Rate limiting capability"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "Slight delay for legitimate users",
+          "May need tuning to avoid false positives"
+        ],
+        "cost_category": "LOW",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Slow down attack (but makes it impractical)",
+          "Distribute across many IPs"
+        ],
+        "detection_bypass_rate": 0.2
+      },
+      {
+        "countermeasure_id": "CM-BF-003",
+        "name": "CAPTCHA",
+        "description": "Require human verification after failed attempts",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.95,
+        "false_positive_rate": 0.02,
+        "effective_against_stages": [
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-002"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "CAPTCHA service (reCAPTCHA, hCaptcha)",
+          "Web application integration"
+        ],
+        "user_impact": "MEDIUM",
+        "business_impact": "LOW",
+        "potential_side_effects": [
+          "User experience friction",
+          "Accessibility issues",
+          "Mobile usability concerns"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "CAPTCHA solving services ($1-3 per 1000)",
+          "AI CAPTCHA solvers"
+        ],
+        "detection_bypass_rate": 0.15
+      },
+      {
+        "countermeasure_id": "CM-BF-004",
+        "name": "Multi-Factor Authentication (MFA)",
+        "description": "Require second factor even if password is correct",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.99,
+        "false_positive_rate": 0.01,
+        "effective_against_stages": [
+          3,
+          4
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-002",
+          "ATK-AUTH-003"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "MFA solution (TOTP, SMS, push notification)",
+          "User enrollment process"
+        ],
+        "user_impact": "MEDIUM",
+        "business_impact": "LOW",
+        "potential_side_effects": [
+          "Requires user to have phone/token",
+          "Support burden for lost devices",
+          "Initial resistance from users"
+        ],
+        "cost_category": "LOW",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "SIM swapping attacks",
+          "MFA fatigue attacks",
+          "Social engineering for codes"
+        ],
+        "detection_bypass_rate": 0.05
+      },
+      {
+        "countermeasure_id": "CM-BF-005",
+        "name": "IP Blocking",
+        "description": "Block IP addresses after suspicious activity",
+        "countermeasure_type": "Responsive",
+        "effectiveness_percentage": 0.7,
+        "false_positive_rate": 0.15,
+        "effective_against_stages": [
+          1,
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001"
+        ],
+        "implementation_speed": "Immediate",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Firewall or WAF",
+          "Automated blocking rules"
+        ],
+        "user_impact": "HIGH",
+        "business_impact": "MEDIUM",
+        "potential_side_effects": [
+          "May block legitimate users behind NAT",
+          "VPN/corporate network issues",
+          "Dynamic IP reuse problems"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Use VPN/proxy rotation",
+          "Use residential proxies",
+          "Use Tor network"
+        ],
+        "detection_bypass_rate": 0.6
+      },
+      {
+        "countermeasure_id": "CM-BF-006",
+        "name": "Anomaly-Based Detection",
+        "description": "Use ML to detect unusual authentication patterns",
+        "countermeasure_type": "Detective",
+        "effectiveness_percentage": 0.85,
+        "false_positive_rate": 0.1,
+        "effective_against_stages": [
+          1,
+          2,
+          3
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-002",
+          "ATK-AUTH-003"
+        ],
+        "implementation_speed": "Slow",
+        "implementation_complexity": "HIGH",
+        "technical_requirements": [
+          "SIEM or UEBA solution",
+          "ML/AI capabilities",
+          "Historical baseline data"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "Requires tuning period",
+          "May generate alerts for legitimate behavior changes"
+        ],
+        "cost_category": "HIGH",
+        "ongoing_maintenance": "HIGH",
+        "attacker_workarounds": [
+          "Blend with normal traffic patterns",
+          "Slow, patient attacks"
+        ],
+        "detection_bypass_rate": 0.25
+      },
+      {
+        "countermeasure_id": "CM-BF-007",
+        "name": "Password Policy Enforcement",
+        "description": "Require strong, complex passwords",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.7,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-001",
+          "ATK-AUTH-003"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Password policy configuration",
+          "Password strength checker"
+        ],
+        "user_impact": "MEDIUM",
+        "business_impact": "LOW",
+        "potential_side_effects": [
+          "Users write passwords down",
+          "Password reuse across sites",
+          "User frustration"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Use larger password lists",
+          "Still vulnerable to credential stuffing"
+        ],
+        "detection_bypass_rate": 0.3
+      },
+      {
+        "countermeasure_id": "CM-BF-008",
+        "name": "Credential Monitoring",
+        "description": "Monitor for compromised credentials on dark web",
+        "countermeasure_type": "Detective",
+        "effectiveness_percentage": 0.8,
+        "false_positive_rate": 0.05,
+        "effective_against_stages": [
+          1
+        ],
+        "effective_against_attacks": [
+          "ATK-AUTH-002"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "Credential monitoring service",
+          "Dark web monitoring"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Use credentials before they're detected",
+          "Use fresh breaches"
+        ],
+        "detection_bypass_rate": 0.2
+      }
+    ],
+    "defensive_strategy": {
+      "strategy_id": "STRAT-001",
+      "attack_id": "ATK-AUTH-001",
+      "attack_name": "Brute Force Attack",
+      "stage_countermeasures": {
+        "1": [
+          "CM-BF-005",
+          "CM-BF-006"
+        ],
+        "2": [
+          "CM-BF-001",
+          "CM-BF-002",
+          "CM-BF-003",
+          "CM-BF-007"
+        ],
+        "3": [
+          "CM-BF-004",
+          "CM-BF-006"
+        ],
+        "4": [
+          "CM-BF-004",
+          "CM-BF-006"
+        ]
+      },
+      "immediate_actions": [
+        {
+          "action": "Enable CAPTCHA on login page",
+          "effectiveness": "95%",
+          "time": "5 minutes",
+          "countermeasure_id": "CM-BF-003"
+        },
+        {
+          "action": "Enable rate limiting",
+          "effectiveness": "90%",
+          "time": "15 minutes",
+          "countermeasure_id": "CM-BF-002"
+        },
+        {
+          "action": "Block attacking IP addresses",
+          "effectiveness": "70%",
+          "time": "Immediate",
+          "countermeasure_id": "CM-BF-005"
+        }
+      ],
+      "short_term_actions": [
+        {
+          "action": "Enable account lockout policy",
+          "effectiveness": "85%",
+          "time": "1 hour",
+          "countermeasure_id": "CM-BF-001"
+        },
+        {
+          "action": "Force password reset for targeted accounts",
+          "effectiveness": "100%",
+          "time": "2 hours",
+          "countermeasure_id": null
+        },
+        {
+          "action": "Enable MFA for admin accounts",
+          "effectiveness": "99%",
+          "time": "4 hours",
+          "countermeasure_id": "CM-BF-004"
+        }
+      ],
+      "long_term_actions": [
+        {
+          "action": "Deploy SIEM with anomaly detection",
+          "effectiveness": "85%",
+          "time": "1 week",
+          "countermeasure_id": "CM-BF-006"
+        },
+        {
+          "action": "Enable MFA for all users",
+          "effectiveness": "99%",
+          "time": "2 weeks",
+          "countermeasure_id": "CM-BF-004"
+        },
+        {
+          "action": "Implement credential monitoring",
+          "effectiveness": "80%",
+          "time": "1 week",
+          "countermeasure_id": "CM-BF-008"
+        }
+      ],
+      "overall_effectiveness": 0.95,
+      "required_tools": [
+        "Web Application Firewall",
+        "SIEM/UEBA",
+        "MFA solution",
+        "CAPTCHA service"
+      ],
+      "required_skills": [
+        "System administration",
+        "Security engineering",
+        "Incident response"
+      ],
+      "estimated_cost": "$5,000 - $50,000 depending on organization size"
+    },
+    "response_playbook": {
+      "playbook_id": "RESPONSE-001",
+      "attack_id": "ATK-AUTH-001",
+      "attack_name": "Brute Force Attack Response",
+      "detection_indicators": [
+        "Failed login attempts > 10 in 5 minutes",
+        "High authentication request rate",
+        "Multiple accounts targeted from single IP",
+        "Sequential username testing"
+      ],
+      "detection_threshold": "50 failed attempts in 5 minutes = CRITICAL",
+      "containment_steps": [
+        {
+          "step": 1,
+          "action": "Enable CAPTCHA immediately",
+          "time": "5 minutes",
+          "responsible": "Security team"
+        },
+        {
+          "step": 2,
+          "action": "Block attacking IP addresses",
+          "time": "Immediate",
+          "responsible": "Security team"
+        },
+        {
+          "step": 3,
+          "action": "Enable rate limiting",
+          "time": "15 minutes",
+          "responsible": "DevOps team"
+        },
+        {
+          "step": 4,
+          "action": "Notify affected users",
+          "time": "30 minutes",
+          "responsible": "Communications team"
+        }
+      ],
+      "eradication_steps": [
+        {
+          "step": 1,
+          "action": "Review all compromised accounts",
+          "time": "1 hour",
+          "responsible": "Security team"
+        },
+        {
+          "step": 2,
+          "action": "Force password reset for targeted accounts",
+          "time": "2 hours",
+          "responsible": "IT team"
+        },
+        {
+          "step": 3,
+          "action": "Revoke all active sessions for compromised accounts",
+          "time": "30 minutes",
+          "responsible": "IT team"
+        },
+        {
+          "step": 4,
+          "action": "Implement account lockout policy",
+          "time": "1 hour",
+          "responsible": "IT team"
+        }
+      ],
+      "recovery_steps": [
+        {
+          "step": 1,
+          "action": "Monitor for continued attack attempts",
+          "time": "24 hours",
+          "responsible": "Security team"
+        },
+        {
+          "step": 2,
+          "action": "Enable MFA for all admin accounts",
+          "time": "4 hours",
+          "responsible": "IT team"
+        },
+        {
+          "step": 3,
+          "action": "Conduct security awareness training",
+          "time": "1 week",
+          "responsible": "HR/Security team"
+        },
+        {
+          "step": 4,
+          "action": "Review and strengthen password policies",
+          "time": "3 days",
+          "responsible": "Security team"
+        }
+      ],
+      "response_timeline": {
+        "Detection to Containment": "15 minutes",
+        "Containment to Eradication": "2 hours",
+        "Eradication to Recovery": "24 hours",
+        "Total Response Time": "~27 hours"
+      },
+      "success_indicators": [
+        "Attack attempts drop to zero",
+        "No successful logins from attacking IPs",
+        "All compromised accounts secured",
+        "MFA enabled on critical accounts",
+        "No data exfiltration detected"
+      ]
+    }
+  },
+  "CMSET-002": {
+    "set_id": "CMSET-002",
+    "attack_id": "ATK-INJ-001",
+    "attack_name": "SQL Injection Attack",
+    "countermeasures": [
+      {
+        "countermeasure_id": "CM-SQL-001",
+        "name": "Input Validation",
+        "description": "Validate and sanitize all user input",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.9,
+        "false_positive_rate": 0.05,
+        "effective_against_stages": [
+          1,
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "Code changes required",
+          "Input validation library"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May reject legitimate special characters"
+        ],
+        "cost_category": "LOW",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Find validation bypass",
+          "Encoding tricks"
+        ],
+        "detection_bypass_rate": 0.15
+      },
+      {
+        "countermeasure_id": "CM-SQL-002",
+        "name": "Parameterized Queries / Prepared Statements",
+        "description": "Use parameterized queries instead of string concatenation",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.99,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          1,
+          2,
+          3
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001"
+        ],
+        "implementation_speed": "Slow",
+        "implementation_complexity": "HIGH",
+        "technical_requirements": [
+          "Code refactoring",
+          "ORM or prepared statement support"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "None (when implemented correctly)"
+        ],
+        "detection_bypass_rate": 0.01
+      },
+      {
+        "countermeasure_id": "CM-SQL-003",
+        "name": "Web Application Firewall (WAF)",
+        "description": "Filter malicious SQL patterns at network edge",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.85,
+        "false_positive_rate": 0.1,
+        "effective_against_stages": [
+          1,
+          2
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001",
+          "ATK-INJ-002"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "WAF solution (ModSecurity, Cloudflare, etc.)",
+          "Rule configuration"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May block legitimate requests",
+          "Latency increase"
+        ],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Encoding/obfuscation",
+          "WAF bypass techniques"
+        ],
+        "detection_bypass_rate": 0.25
+      },
+      {
+        "countermeasure_id": "CM-SQL-004",
+        "name": "Least Privilege Database Access",
+        "description": "Database user has minimal necessary permissions",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.8,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          3,
+          4
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Database administration",
+          "Permission review"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May break functionality if too restrictive"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Limited (can't escalate beyond granted permissions)"
+        ],
+        "detection_bypass_rate": 0.05
+      },
+      {
+        "countermeasure_id": "CM-SQL-005",
+        "name": "Error Message Suppression",
+        "description": "Hide database error details from users",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.6,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          1
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Application configuration change"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "Harder to debug legitimate issues"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "NONE",
+        "attacker_workarounds": [
+          "Blind SQL injection techniques"
+        ],
+        "detection_bypass_rate": 0.4
+      },
+      {
+        "countermeasure_id": "CM-SQL-006",
+        "name": "Database Activity Monitoring",
+        "description": "Monitor and alert on suspicious database queries",
+        "countermeasure_type": "Detective",
+        "effectiveness_percentage": 0.85,
+        "false_positive_rate": 0.15,
+        "effective_against_stages": [
+          2,
+          3
+        ],
+        "effective_against_attacks": [
+          "ATK-INJ-001"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "HIGH",
+        "technical_requirements": [
+          "DAM solution",
+          "Query baseline"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "Performance overhead"
+        ],
+        "cost_category": "HIGH",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Slow queries to avoid detection"
+        ],
+        "detection_bypass_rate": 0.2
+      }
+    ],
+    "defensive_strategy": {
+      "strategy_id": "STRAT-002",
+      "attack_id": "ATK-INJ-001",
+      "attack_name": "SQL Injection Attack",
+      "stage_countermeasures": {
+        "1": [
+          "CM-SQL-003",
+          "CM-SQL-005"
+        ],
+        "2": [
+          "CM-SQL-001",
+          "CM-SQL-002",
+          "CM-SQL-003",
+          "CM-SQL-006"
+        ],
+        "3": [
+          "CM-SQL-004",
+          "CM-SQL-006"
+        ],
+        "4": [
+          "CM-SQL-004"
+        ]
+      },
+      "immediate_actions": [
+        {
+          "action": "Enable WAF with SQL injection rules",
+          "effectiveness": "85%",
+          "time": "30 minutes",
+          "countermeasure_id": "CM-SQL-003"
+        },
+        {
+          "action": "Block attacking IP addresses",
+          "effectiveness": "70%",
+          "time": "Immediate",
+          "countermeasure_id": null
+        },
+        {
+          "action": "Disable vulnerable endpoint if possible",
+          "effectiveness": "100%",
+          "time": "Immediate",
+          "countermeasure_id": null
+        }
+      ],
+      "short_term_actions": [
+        {
+          "action": "Review and restrict database permissions",
+          "effectiveness": "80%",
+          "time": "2 hours",
+          "countermeasure_id": "CM-SQL-004"
+        },
+        {
+          "action": "Implement input validation on vulnerable parameters",
+          "effectiveness": "90%",
+          "time": "4 hours",
+          "countermeasure_id": "CM-SQL-001"
+        },
+        {
+          "action": "Suppress database error messages",
+          "effectiveness": "60%",
+          "time": "1 hour",
+          "countermeasure_id": "CM-SQL-005"
+        }
+      ],
+      "long_term_actions": [
+        {
+          "action": "Refactor code to use parameterized queries",
+          "effectiveness": "99%",
+          "time": "2 weeks",
+          "countermeasure_id": "CM-SQL-002"
+        },
+        {
+          "action": "Deploy database activity monitoring",
+          "effectiveness": "85%",
+          "time": "1 week",
+          "countermeasure_id": "CM-SQL-006"
+        },
+        {
+          "action": "Conduct security code review",
+          "effectiveness": "95%",
+          "time": "1 week",
+          "countermeasure_id": null
+        }
+      ],
+      "overall_effectiveness": 0.97,
+      "required_tools": [
+        "Web Application Firewall",
+        "Code analysis tools",
+        "Database Activity Monitor"
+      ],
+      "required_skills": [
+        "Secure coding",
+        "Database administration",
+        "Web application security"
+      ],
+      "estimated_cost": "$10,000 - $100,000"
+    },
+    "response_playbook": {
+      "playbook_id": "RESPONSE-002",
+      "attack_id": "ATK-INJ-001",
+      "attack_name": "SQL Injection Attack Response",
+      "detection_indicators": [
+        "SQL keywords in parameters",
+        "Database error messages",
+        "Unusual query execution times",
+        "UNION SELECT patterns",
+        "information_schema queries"
+      ],
+      "detection_threshold": "3+ SQL injection attempts = HIGH priority",
+      "containment_steps": [
+        {
+          "step": 1,
+          "action": "Enable WAF with aggressive SQL rules",
+          "time": "30 minutes",
+          "responsible": "Security team"
+        },
+        {
+          "step": 2,
+          "action": "Block attacking IPs",
+          "time": "Immediate",
+          "responsible": "Security team"
+        },
+        {
+          "step": 3,
+          "action": "Isolate vulnerable application/endpoint",
+          "time": "15 minutes",
+          "responsible": "DevOps team"
+        }
+      ],
+      "eradication_steps": [
+        {
+          "step": 1,
+          "action": "Patch vulnerable code",
+          "time": "4 hours",
+          "responsible": "Development team"
+        },
+        {
+          "step": 2,
+          "action": "Review database for unauthorized changes",
+          "time": "2 hours",
+          "responsible": "Database team"
+        },
+        {
+          "step": 3,
+          "action": "Reset database credentials",
+          "time": "1 hour",
+          "responsible": "Database team"
+        }
+      ],
+      "recovery_steps": [
+        {
+          "step": 1,
+          "action": "Restore database from clean backup if needed",
+          "time": "Variable",
+          "responsible": "Database team"
+        },
+        {
+          "step": 2,
+          "action": "Re-enable application with patches",
+          "time": "1 hour",
+          "responsible": "DevOps team"
+        },
+        {
+          "step": 3,
+          "action": "Monitor for continued attacks",
+          "time": "48 hours",
+          "responsible": "Security team"
+        }
+      ],
+      "response_timeline": {
+        "Detection to Containment": "30 minutes",
+        "Containment to Eradication": "4 hours",
+        "Eradication to Recovery": "Variable (hours to days)",
+        "Total Response Time": "~12-48 hours"
+      },
+      "success_indicators": [
+        "No SQL injection attempts succeeding",
+        "Vulnerable code patched",
+        "Database integrity verified",
+        "WAF blocking malicious patterns",
+        "Application functioning normally"
+      ]
+    }
+  },
+  "CMSET-003": {
+    "set_id": "CMSET-003",
+    "attack_id": "ATK-MAL-001",
+    "attack_name": "Ransomware Attack",
+    "countermeasures": [
+      {
+        "countermeasure_id": "CM-RW-001",
+        "name": "Offline Backups",
+        "description": "Maintain air-gapped, offline backups",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.95,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          5
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "Backup solution",
+          "Offline/air-gapped storage",
+          "Regular backup schedule"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Corrupt backups before encryption (if accessible)",
+          "Wait longer before encrypting"
+        ],
+        "detection_bypass_rate": 0.05
+      },
+      {
+        "countermeasure_id": "CM-RW-002",
+        "name": "Endpoint Detection and Response (EDR)",
+        "description": "Detect and block ransomware behavior on endpoints",
+        "countermeasure_type": "Detective",
+        "effectiveness_percentage": 0.9,
+        "false_positive_rate": 0.1,
+        "effective_against_stages": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "HIGH",
+        "technical_requirements": [
+          "EDR solution",
+          "Behavioral analysis capability"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May block legitimate applications"
+        ],
+        "cost_category": "HIGH",
+        "ongoing_maintenance": "HIGH",
+        "attacker_workarounds": [
+          "EDR evasion techniques",
+          "Kill EDR process first"
+        ],
+        "detection_bypass_rate": 0.15
+      },
+      {
+        "countermeasure_id": "CM-RW-003",
+        "name": "Network Segmentation",
+        "description": "Isolate critical systems to prevent lateral movement",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.85,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          3,
+          4
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Slow",
+        "implementation_complexity": "HIGH",
+        "technical_requirements": [
+          "Network redesign",
+          "VLANs/firewalls",
+          "Access controls"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May complicate legitimate access"
+        ],
+        "cost_category": "HIGH",
+        "ongoing_maintenance": "MEDIUM",
+        "attacker_workarounds": [
+          "Compromise admin credentials",
+          "Find pivot points"
+        ],
+        "detection_bypass_rate": 0.2
+      },
+      {
+        "countermeasure_id": "CM-RW-004",
+        "name": "Email Filtering and Anti-Phishing",
+        "description": "Block malicious emails and attachments",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.8,
+        "false_positive_rate": 0.05,
+        "effective_against_stages": [
+          1
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "Email security gateway",
+          "Anti-phishing tools"
+        ],
+        "user_impact": "LOW",
+        "business_impact": "NONE",
+        "potential_side_effects": [
+          "May quarantine legitimate emails"
+        ],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Social engineering",
+          "Compromise legitimate accounts"
+        ],
+        "detection_bypass_rate": 0.25
+      },
+      {
+        "countermeasure_id": "CM-RW-005",
+        "name": "Disable Macros and Scripts",
+        "description": "Block execution of Office macros and scripts by default",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.75,
+        "false_positive_rate": 0.1,
+        "effective_against_stages": [
+          1
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Fast",
+        "implementation_complexity": "LOW",
+        "technical_requirements": [
+          "Group Policy or MDM",
+          "Office configuration"
+        ],
+        "user_impact": "MEDIUM",
+        "business_impact": "LOW",
+        "potential_side_effects": [
+          "Breaks legitimate macro-based workflows"
+        ],
+        "cost_category": "FREE",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "Exploit other attack vectors",
+          "Social engineer users to enable macros"
+        ],
+        "detection_bypass_rate": 0.3
+      },
+      {
+        "countermeasure_id": "CM-RW-006",
+        "name": "Immutable Backups",
+        "description": "Use write-once, read-many (WORM) backup storage",
+        "countermeasure_type": "Preventive",
+        "effectiveness_percentage": 0.98,
+        "false_positive_rate": 0.0,
+        "effective_against_stages": [
+          5
+        ],
+        "effective_against_attacks": [
+          "ATK-MAL-001"
+        ],
+        "implementation_speed": "Moderate",
+        "implementation_complexity": "MEDIUM",
+        "technical_requirements": [
+          "WORM-capable storage",
+          "Backup solution supporting immutability"
+        ],
+        "user_impact": "NONE",
+        "business_impact": "NONE",
+        "potential_side_effects": [],
+        "cost_category": "MEDIUM",
+        "ongoing_maintenance": "LOW",
+        "attacker_workarounds": [
+          "None (backups cannot be modified)"
+        ],
+        "detection_bypass_rate": 0.02
+      }
+    ],
+    "defensive_strategy": {
+      "strategy_id": "STRAT-003",
+      "attack_id": "ATK-MAL-001",
+      "attack_name": "Ransomware Attack",
+      "stage_countermeasures": {
+        "1": [
+          "CM-RW-004",
+          "CM-RW-005"
+        ],
+        "2": [
+          "CM-RW-002"
+        ],
+        "3": [
+          "CM-RW-002",
+          "CM-RW-003"
+        ],
+        "4": [
+          "CM-RW-002",
+          "CM-RW-003"
+        ],
+        "5": [
+          "CM-RW-001",
+          "CM-RW-002",
+          "CM-RW-006"
+        ]
+      },
+      "immediate_actions": [
+        {
+          "action": "Isolate infected systems from network",
+          "effectiveness": "95%",
+          "time": "Immediate",
+          "countermeasure_id": null
+        },
+        {
+          "action": "Shut down non-critical systems",
+          "effectiveness": "90%",
+          "time": "15 minutes",
+          "countermeasure_id": null
+        },
+        {
+          "action": "Block known malware IOCs at perimeter",
+          "effectiveness": "80%",
+          "time": "30 minutes",
+          "countermeasure_id": null
+        }
+      ],
+      "short_term_actions": [
+        {
+          "action": "Deploy EDR to all endpoints",
+          "effectiveness": "90%",
+          "time": "4 hours",
+          "countermeasure_id": "CM-RW-002"
+        },
+        {
+          "action": "Verify backup integrity and accessibility",
+          "effectiveness": "100%",
+          "time": "2 hours",
+          "countermeasure_id": "CM-RW-001"
+        },
+        {
+          "action": "Implement network segmentation",
+          "effectiveness": "85%",
+          "time": "24 hours",
+          "countermeasure_id": "CM-RW-003"
+        }
+      ],
+      "long_term_actions": [
+        {
+          "action": "Implement immutable backups",
+          "effectiveness": "98%",
+          "time": "1 week",
+          "countermeasure_id": "CM-RW-006"
+        },
+        {
+          "action": "Deploy email filtering solution",
+          "effectiveness": "80%",
+          "time": "3 days",
+          "countermeasure_id": "CM-RW-004"
+        },
+        {
+          "action": "Security awareness training",
+          "effectiveness": "70%",
+          "time": "Ongoing",
+          "countermeasure_id": null
+        }
+      ],
+      "overall_effectiveness": 0.92,
+      "required_tools": [
+        "EDR solution",
+        "Backup solution",
+        "Email security gateway",
+        "Network segmentation tools"
+      ],
+      "required_skills": [
+        "Malware analysis",
+        "Incident response",
+        "Network architecture",
+        "Backup/recovery"
+      ],
+      "estimated_cost": "$50,000 - $500,000"
+    },
+    "response_playbook": {
+      "playbook_id": "RESPONSE-003",
+      "attack_id": "ATK-MAL-001",
+      "attack_name": "Ransomware Attack Response",
+      "detection_indicators": [
+        "Mass file modifications",
+        "File extension changes",
+        "Ransom notes appearing",
+        "Shadow copy deletions",
+        "Unusual process behavior"
+      ],
+      "detection_threshold": "Immediate CRITICAL response",
+      "containment_steps": [
+        {
+          "step": 1,
+          "action": "Isolate infected systems (disconnect network)",
+          "time": "Immediate",
+          "responsible": "IT/Security team"
+        },
+        {
+          "step": 2,
+          "action": "Shut down unaffected systems to prevent spread",
+          "time": "15 minutes",
+          "responsible": "IT team"
+        },
+        {
+          "step": 3,
+          "action": "Identify ransomware variant",
+          "time": "1 hour",
+          "responsible": "Security team"
+        },
+        {
+          "step": 4,
+          "action": "Notify management and stakeholders",
+          "time": "30 minutes",
+          "responsible": "Incident Commander"
+        }
+      ],
+      "eradication_steps": [
+        {
+          "step": 1,
+          "action": "Remove ransomware from infected systems",
+          "time": "4 hours",
+          "responsible": "Security team"
+        },
+        {
+          "step": 2,
+          "action": "Verify all systems are clean",
+          "time": "2 hours",
+          "responsible": "Security team"
+        },
+        {
+          "step": 3,
+          "action": "Reset all credentials",
+          "time": "4 hours",
+          "responsible": "IT team"
+        }
+      ],
+      "recovery_steps": [
+        {
+          "step": 1,
+          "action": "Restore from clean backups",
+          "time": "Variable (hours to days)",
+          "responsible": "IT/Backup team"
+        },
+        {
+          "step": 2,
+          "action": "Rebuild systems if necessary",
+          "time": "Variable",
+          "responsible": "IT team"
+        },
+        {
+          "step": 3,
+          "action": "Gradually bring systems back online",
+          "time": "Variable",
+          "responsible": "IT team"
+        },
+        {
+          "step": 4,
+          "action": "Monitor for re-infection",
+          "time": "1 week",
+          "responsible": "Security team"
+        }
+      ],
+      "response_timeline": {
+        "Detection to Containment": "15 minutes",
+        "Containment to Eradication": "8 hours",
+        "Eradication to Recovery": "Days to weeks",
+        "Total Response Time": "Variable (typically 1-2 weeks)"
+      },
+      "success_indicators": [
+        "All ransomware removed",
+        "Systems restored from backups",
+        "No re-infection after 7 days",
+        "Business operations resumed",
+        "No data loss (if backups successful)"
+      ]
+    }
+  }
+}

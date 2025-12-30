@@ -1,0 +1,8 @@
+timestamp,user,ip_address,result,password_attempt,device,user_agent
+2025-03-01T01:12:01,admin,45.67.89.10,FAILED,admin123,unknown,curl/7.88
+2025-03-01T01:12:03,admin,45.67.89.10,FAILED,password,unknown,curl/7.88
+2025-03-01T01:12:05,admin,45.67.89.10,FAILED,123456,unknown,curl/7.88
+2025-03-01T01:12:07,admin,45.67.89.10,FAILED,letmein,unknown,curl/7.88
+2025-03-01T01:12:09,admin,103.44.22.91,FAILED,admin,unknown,curl/7.88
+2025-03-01T01:12:11,admin,185.220.101.1,FAILED,password,unknown,curl/7.88
+2025-03-01T01:12:13,admin,45.67.89.10,SUCCESS,correctPassword!,unknown,curl/7.88

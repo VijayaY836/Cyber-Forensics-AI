@@ -136,7 +136,7 @@ else:
 # --- Begin Process & Clear Button ---
 col_begin, col_clear = st.columns([3,1])
 with col_begin:
-    begin = st.button(" Begin Analysis", type="primary")
+    begin = st.button("🚦 Begin Process", type="primary")
 with col_clear:
     clear = st.button("🧹 Clear", type="secondary")
 
@@ -909,16 +909,28 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
     with tab6:
         # --- Forensic Report Tab ---
         from modules.report_generator import generate_forensic_report
-        st.success("✅ Ready to generate forensic report")
-        if 'forensic_report' not in st.session_state:
+        
+        st.markdown("### 📊 Forensic Report Generation")
+        
+        # Generate report ONCE if not already generated
+        if 'forensic_report' not in st.session_state or st.session_state.forensic_report is None:
             with st.spinner("📝 Generating comprehensive forensic report..."):
                 try:
-                    logs_df = st.session_state.logs_data
-                    anomaly_df = st.session_state.anomalies
-                    correlation_results = st.session_state.get('correlation_results', None)
-                    timeline_results = st.session_state.get('timeline_results', None)
-                    log_stats = st.session_state.get('log_stats', None)
-                    prediction_results = st.session_state.get('prediction_results', None)
+                    # Get all data (some can be None)
+                    logs_df = st.session_state.get('logs_data')
+                    anomaly_df = st.session_state.get('anomalies')
+                    correlation_results = st.session_state.get('correlation_results')
+                    timeline_results = st.session_state.get('timeline_results')
+                    log_stats = st.session_state.get('log_stats')
+                    prediction_results = st.session_state.get('prediction_results')
+                    
+                    # Only logs_df and anomaly_df are required
+                    if logs_df is None or anomaly_df is None:
+                        st.error("❌ Cannot generate report: Missing log data or anomaly detection results")
+                        st.info("💡 Please run the complete analysis first by clicking 'Begin Analysis'")
+                        st.stop()
+                    
+                    # Generate report (other params can be None)
                     report = generate_forensic_report(
                         logs_df=logs_df,
                         anomaly_df=anomaly_df,
@@ -926,95 +938,82 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
                         timeline_results=timeline_results,
                         log_stats=log_stats,
                         prediction_results=prediction_results
-
                     )
                     st.session_state.forensic_report = report
                     st.success("✅ Forensic report generated successfully!")
+                    
                 except Exception as e:
                     st.error(f"❌ Error generating report: {str(e)}")
-        # Always try to generate the report if missing and analysis is complete
-        if 'forensic_report' not in st.session_state or st.session_state.forensic_report is None:
-            try:
-                from modules.report_generator import generate_forensic_report
-                logs_df = st.session_state.logs_data
-                anomaly_df = st.session_state.anomalies
-                correlation_results = st.session_state.get('correlation_results', None)
-                timeline_results = st.session_state.get('timeline_results', None)
-                log_stats = st.session_state.get('log_stats', None)
-                prediction_results = st.session_state.get('prediction_results', None)
-                report = generate_forensic_report(
-                    logs_df=logs_df,
-                    anomaly_df=anomaly_df,
-                    correlation_results=correlation_results,
-                    timeline_results=timeline_results,
-                    log_stats=log_stats,
-                    prediction_results=prediction_results
-                )
-                st.session_state.forensic_report = report
-            except Exception as e:
-                st.session_state.forensic_report = None
-                st.error(f"❌ Error generating report: {str(e)}")
+                    import traceback
+                    with st.expander("🔍 Show detailed error"):
+                        st.code(traceback.format_exc())
+                    st.session_state.forensic_report = None
+                    st.stop()
         
         report = st.session_state.forensic_report
+        
+        # Check if report was successfully generated
+        if report is None:
+            st.error("❌ Report generation failed. Please check the errors above.")
+            st.stop()
         
         st.markdown("### 📥 Download Report")
         col1, col2, col3, col4 = st.columns(4)
         
-        if report is not None:
-            with col1:
-                st.markdown("#### 📄 PDF Format")
-                from utils.pdf_generator import generate_pdf_report
-                
-                # Generate PDF once and cache it in session state
-                if 'pdf_bytes' not in st.session_state:
-                    with st.spinner("📄 Generating PDF..."):
-                        try:
-                            st.session_state.pdf_bytes = generate_pdf_report(report)
-                        except Exception as e:
-                            st.error(f"❌ PDF generation error: {str(e)}")
-                            st.session_state.pdf_bytes = None
-                
-                # Direct download button without page change
-                if st.session_state.get('pdf_bytes'):
-                    st.download_button(
-                        label="📥 Download as PDF",
-                        data=st.session_state.pdf_bytes,
-                        file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                        mime="application/pdf",
-                        use_container_width=True,
-                        key="download_pdf"
-                    )
-                    st.caption("✅ Professional PDF with formatting")
-                else:
-                    st.error("❌ PDF not available")
-                    
-            with col2:
-                st.markdown("#### 📝 Markdown Format")
+        with col1:
+            st.markdown("#### 📄 PDF Format")
+            from utils.pdf_generator import generate_pdf_report
+            
+            # Generate PDF once and cache it in session state
+            if 'pdf_bytes' not in st.session_state:
+                with st.spinner("📄 Generating PDF..."):
+                    try:
+                        st.session_state.pdf_bytes = generate_pdf_report(report)
+                    except Exception as e:
+                        st.error(f"❌ PDF generation error: {str(e)}")
+                        st.session_state.pdf_bytes = None
+            
+            # Direct download button
+            if st.session_state.get('pdf_bytes'):
                 st.download_button(
-                    label="📥 Download as .md", 
-                    data=report, 
-                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md", 
-                    mime="text/markdown", 
-                    use_container_width=True, 
-                    type="primary"
+                    label="📥 Download as PDF",
+                    data=st.session_state.pdf_bytes,
+                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                    key="download_pdf"
                 )
-                st.caption("✅ Best for version control")
+                st.caption("✅ Professional PDF with formatting")
+            else:
+                st.error("❌ PDF not available")
                 
-            with col3:
-                st.markdown("#### 📋 Text Format")
-                st.download_button(
-                    label="📥 Download as .txt", 
-                    data=report, 
-                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", 
-                    mime="text/plain", 
-                    use_container_width=True, 
-                    type="primary"
-                )
-                st.caption("✅ Universal compatibility")
-                
-            with col4:
-                st.markdown("#### 🌐 HTML Format")
-                html_report = f"""
+        with col2:
+            st.markdown("#### 📝 Markdown Format")
+            st.download_button(
+                label="📥 Download as .md", 
+                data=report, 
+                file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md", 
+                mime="text/markdown", 
+                use_container_width=True, 
+                type="primary"
+            )
+            st.caption("✅ Best for version control")
+            
+        with col3:
+            st.markdown("#### 📋 Text Format")
+            st.download_button(
+                label="📥 Download as .txt", 
+                data=report, 
+                file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", 
+                mime="text/plain", 
+                use_container_width=True, 
+                type="primary"
+            )
+            st.caption("✅ Universal compatibility")
+            
+        with col4:
+            st.markdown("#### 🌐 HTML Format")
+            html_report = f"""
 <!DOCTYPE html>
 <html>
 <head>
@@ -1032,25 +1031,20 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
 </body>
 </html>
 """
-                st.download_button(
-                    label="📥 Download as .html", 
-                    data=html_report, 
-                    file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html", 
-                    mime="text/html", 
-                    use_container_width=True, 
-                    type="primary"
-                )
-                st.caption("✅ Open in any browser")
-        else:
-            st.warning("❌ Report content is missing. Please re-run the analysis or check for errors above.")
-            
+            st.download_button(
+                label="📥 Download as .html", 
+                data=html_report, 
+                file_name=f"forensic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html", 
+                mime="text/html", 
+                use_container_width=True, 
+                type="primary"
+            )
+            st.caption("✅ Open in any browser")
+        
         st.markdown("### 📄 Full Forensic Report")
         with st.container():
-            if report:
-                st.markdown(report)
-            else:
-                st.warning("❌ Report content is missing. Please re-run the analysis or check for errors above.")
-                
+            st.markdown(report)
+            
         st.markdown("### 📊 Format Comparison")
         format_comparison = pd.DataFrame({
             'Format': ['PDF', 'Markdown', 'Text', 'HTML'],
@@ -1070,18 +1064,20 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
         st.markdown("### 📊 Report Statistics")
         col1, col2, col3, col4 = st.columns(4)
         
-        if report:  # Only show stats if report exists
+        # FIXED: Check if report exists and is a string before calculating stats
+        if report and isinstance(report, str):
+            word_count = len(report.split())
+            line_count = len(report.split('\n'))
+            char_count = len(report)
+            reading_time = max(1, word_count // 200)
+            
             with col1:
-                word_count = len(report.split())
                 st.metric("Word Count", f"{word_count:,}")
             with col2:
-                line_count = len(report.split('\n'))
                 st.metric("Lines", f"{line_count:,}")
             with col3:
-                char_count = len(report)
                 st.metric("Characters", f"{char_count:,}")
             with col4:
-                reading_time = max(1, word_count // 200)
                 st.metric("Reading Time", f"{reading_time} min")
         else:
             with col1:
@@ -1108,7 +1104,7 @@ if st.session_state.logs_data is not None and st.session_state.anomalies is not 
                     st.success("✅ No critical security incidents detected")
             with col2:
                 if st.session_state.get('correlation_results'):
-                    chains = st.session_state.correlation_results['attack_chains_detected']
+                    chains = st.session_state.correlation_results.get('attack_chains_detected', 0)
                     if chains > 0:
                         st.warning(f"🔗 **{chains}** attack chain(s) identified")
                     else:

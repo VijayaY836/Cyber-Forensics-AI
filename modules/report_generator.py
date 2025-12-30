@@ -291,11 +291,11 @@ class ForensicReportGenerator:
     def _generate_prediction_section(self, prediction_results):
         """Generate attack prediction section"""
         section = "## 🔮 ATTACK PREDICTION & THREAT INTELLIGENCE\n\n"
-    
+
         # Identified attacks
         if 'detected_attacks' in prediction_results and prediction_results['detected_attacks']:
             section += "### 🎯 Identified Attack Types\n\n"
-        
+    
             for attack in prediction_results['detected_attacks']:
                 severity_icon = "🔴" if attack['severity'] == 'CRITICAL' else "🟠" if attack['severity'] == 'HIGH' else "🟡"
                 section += f"#### {severity_icon} {attack['attack_name']}\n\n"
@@ -303,18 +303,18 @@ class ForensicReportGenerator:
                 section += f"- **Severity:** {attack['severity']}\n"
                 section += f"- **Attack ID:** `{attack['attack_id']}`\n"
                 section += f"- **Detection Reason:** {attack['reason']}\n\n"
-    
-        # Next stage prediction
-        if 'next_stage_prediction' in prediction_results:
+
+        # Next stage prediction - FIXED WITH NONE CHECK
+        if 'next_stage_prediction' in prediction_results and prediction_results['next_stage_prediction'] is not None:
             pred = prediction_results['next_stage_prediction']
-        
+    
             section += "### 📊 Next Stage Prediction\n\n"
-        
+    
             if pred.get('next_stage', {}).get('stage_name'):
                 section += f"**Predicted Next Stage:** {pred['next_stage']['stage_name']}\n"
                 section += f"**Probability:** {pred['next_stage']['probability']}\n"
                 section += f"**Severity if Reached:** {pred['next_stage']['severity']}\n\n"
-            
+        
                 # Timing
                 if 'timing' in pred:
                     timing = pred['timing']
@@ -323,7 +323,7 @@ class ForensicReportGenerator:
                     section += f"- Most Likely: {timing['predicted_time_window']['most_likely']}\n"
                     section += f"- Latest: {timing['predicted_time_window']['latest']}\n"
                     section += f"- Detection Window Remaining: **{timing['detection_window_remaining']} minutes**\n\n"
-            
+        
                 # Target prediction
                 if 'likely_targets' in pred:
                     target = pred['likely_targets']
@@ -332,14 +332,14 @@ class ForensicReportGenerator:
                         section += f"- Primary Target: **{target['primary']}**\n"
                         section += f"- Probability: {target['probability']}\n"
                         section += f"- Estimated Damage: {target['estimated_damage']}\n\n"
-    
-        # Point of no return
-        if 'point_of_no_return' in prediction_results:
+
+        # Point of no return - FIXED WITH NONE CHECK
+        if 'point_of_no_return' in prediction_results and prediction_results['point_of_no_return'] is not None:
             ponr = prediction_results['point_of_no_return']
-        
+    
             section += "### ⚠️ Point of No Return Analysis\n\n"
-        
-            if ponr['can_still_stop']:
+    
+            if ponr.get('can_still_stop'):
                 section += f"**Status:** {ponr['status']} - Attack can still be stopped\n"
                 section += f"**Time Remaining:** {ponr['minutes_remaining']} minutes until point of no return\n"
                 section += f"**Stages Remaining:** {ponr['stages_remaining']}\n"
@@ -347,38 +347,38 @@ class ForensicReportGenerator:
             else:
                 section += "🚨 **CRITICAL WARNING:** Attack has reached or passed the point of no return.\n\n"
                 section += "Immediate containment and recovery actions are required.\n\n"
-    
-        # Attacker profile
-        if 'attacker_profile' in prediction_results:
+
+        # Attacker profile - FIXED WITH NONE CHECK
+        if 'attacker_profile' in prediction_results and prediction_results['attacker_profile'] is not None:
             profile = prediction_results['attacker_profile']
-        
+    
             section += "### 👤 Attacker Profile\n\n"
-        
-            if 'identified_attacker' in profile:
+    
+            if 'identified_attacker' in profile and profile['identified_attacker'] is not None:
                 attacker = profile['identified_attacker']
                 section += f"**Identified Type:** {attacker['type']}\n"
                 section += f"**Confidence:** {attacker['confidence']}\n"
                 section += f"**Skill Level:** {attacker['skill_level']}\n"
                 section += f"**Sophistication:** {attacker['sophistication']}\n\n"
-        
-            if 'expected_behaviors' in profile:
+    
+            if 'expected_behaviors' in profile and profile['expected_behaviors'] is not None:
                 behaviors = profile['expected_behaviors']
                 section += "**Expected Behaviors:**\n\n"
                 section += f"- Prefers Stealth: {behaviors['prefers_stealth']}\n"
                 section += f"- Covers Tracks: {behaviors['covers_tracks']}\n"
                 section += f"- Typical Duration: {behaviors['typical_duration']}\n"
                 section += f"- Success Rate: {behaviors['success_rate']}\n\n"
-        
-            if 'likely_next_actions' in profile:
+    
+            if 'likely_next_actions' in profile and profile['likely_next_actions'] is not None:
                 section += "**Likely Next Actions:**\n\n"
                 for action in profile['likely_next_actions'][:5]:
                     section += f"- {action}\n"
                 section += "\n"
-    
-        # Recommended actions from playbook
-        if 'recommended_actions' in prediction_results:
+
+        # Recommended actions from playbook - FIXED WITH NONE CHECK
+        if 'recommended_actions' in prediction_results and prediction_results['recommended_actions'] is not None:
             section += "### 🛡️ Playbook-Based Countermeasures\n\n"
-        
+    
             for i, action in enumerate(prediction_results['recommended_actions'], 1):
                 section += f"**{i}. {action['action']}**\n"
                 section += f"- Effectiveness: {action['effectiveness']}\n"
@@ -386,23 +386,61 @@ class ForensicReportGenerator:
                 if 'countermeasure_id' in action and action['countermeasure_id']:
                     section += f"- Countermeasure ID: `{action['countermeasure_id']}`\n"
                 section += "\n"
+
+        return section
+    
+    def _generate_timeline_section(self, timeline_results):
+        """Generate detailed timeline section"""
+        section = "## ⏱️ ATTACK TIMELINE RECONSTRUCTION\n\n"
+    
+        if not timeline_results:
+            section += "⚠️ Timeline analysis not available.\n\n"
+            return section
+    
+        stats = timeline_results.get('stats', {})
+    
+        section += "### Timeline Overview\n\n"
+        section += f"- **Start Time:** {stats.get('start_time', 'N/A')}\n"
+        section += f"- **End Time:** {stats.get('end_time', 'N/A')}\n"
+        section += f"- **Total Duration:** {stats.get('time_span', 'N/A')}\n"
+        section += f"- **Total Events:** {stats.get('total_events', 0):,}\n"
+        section += f"- **Kill Chain Phases:** {stats.get('phases_observed', 0)}\n"
+        section += f"- **High-Risk Phases:** {stats.get('high_risk_phases', 0)}\n\n"
+    
+        # Attack narrative
+        narrative = timeline_results.get('narrative', '')
+        if narrative:
+            section += "### 📖 Attack Narrative\n\n"
+            section += narrative + "\n\n"
+    
+        # Phase distribution
+        phase_dist = timeline_results.get('phase_distribution', {})
+        if phase_dist:
+            section += "### 🎯 Kill Chain Phase Distribution\n\n"
+            for phase, count in sorted(phase_dist.items(), key=lambda x: x[1], reverse=True):
+                section += f"- **{phase}**: {count} events\n"
+            section += "\n"
+    
+        # Critical periods
+        critical_periods = timeline_results.get('critical_periods', [])
+        if critical_periods:
+            section += "### ⚠️ Critical Time Periods\n\n"
+            section += f"**{len(critical_periods)} high-activity periods identified:**\n\n"
+        
+            for i, period in enumerate(critical_periods[:5], 1):
+                severity_emoji = "🔴" if period.get('severity') == 'CRITICAL' else "🟠"
+                section += f"**{i}. {severity_emoji} {period.get('start', 'N/A')} to {period.get('end', 'N/A')}**\n"
+                section += f"   - Events: {period.get('event_count', 0)}\n"
+                section += f"   - Average Anomaly Score: {period.get('avg_anomaly', 0):.2f}\n\n"
+    
+    # Phase summary
+        phase_summary = timeline_results.get('phase_summary', '')
+        if phase_summary:
+            section += "### 📋 Phase Analysis Summary\n\n"
+            section += phase_summary + "\n\n"
     
         return section
-    def _generate_timeline_section(self, timeline_results):
-        """Generate attack timeline section"""
-        section = "## ⏱️ ATTACK TIMELINE\n\n"
-
-        if not timeline_results:
-            section += "Timeline narrative not available."
-            return section
-
-        section += timeline_results.get(
-            'narrative',
-            'Timeline narrative not available.'
-        )
-
-        return section
-
+    
     
     def _generate_evidence_summary(self, anomaly_df, correlation_results):
         """Generate evidence summary"""
